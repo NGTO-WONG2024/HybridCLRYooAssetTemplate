@@ -40,13 +40,6 @@ namespace Script.Scripts_Aot.Editor
             File.Copy(dllFilePath, Path.Combine(targetFolder, Path.GetFileName(dllFilePath) + ".bytes"), true);
         }
 
-
-        [MenuItem("HybridCLR/My/Test", priority = 122)]
-        public static void Test()
-        {
-            Debug.Log(AssetBundleBuilderHelper.GetDefaultBuildOutputRoot());
-        }
-
         [MenuItem("HybridCLR/My/HotUpdateIOS", priority = 121)]
         public static void HotUpdateIOS()
         {
