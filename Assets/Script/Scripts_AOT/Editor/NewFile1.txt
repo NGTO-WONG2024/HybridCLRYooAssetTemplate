@@ -1,0 +1,10 @@
+URL : http://192.168.100.210:8080/iOS/DefaultPackage/v1.0/PackageManifest_DefaultPackage.version?638565383953646370 Error : Request aborted
+UnityEngine.Debug:LogError(Object)
+Script.Scripts_AOT.<Start>d__2:MoveNext()
+System.Runtime.CompilerServices.MoveNextRunner:Run()
+IngameDebugConsole.DebugLogPopup:Hide()
+System.Threading.Tasks.TaskCompletionSource`1:TrySetResult(TResult)
+YooAsset.AsyncOperationBase:SetFinish()
+YooAsset.OperationSystem:Update()
+YooAsset.YooAssets:Update()
+YooAsset.YooAssetsDriver:Update()
