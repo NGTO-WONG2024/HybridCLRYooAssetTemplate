@@ -9,68 +9,69 @@ namespace Script.Scripts_Aot.Editor
 {
     public class DllCopyHelper
     {
-        static readonly string platform = (EditorUserBuildSettings.activeBuildTarget).ToString();
-        static readonly string projectPath = System.IO.Path.GetDirectoryName(Application.dataPath);
-
-        private static string MetaDataFolder =>
-            Path.Combine(projectPath, "HybridCLRData", "AssembliesPostIl2CppStrip", platform);
-
-        private static string HotUpdateFolder => Path.Combine(projectPath, "HybridCLRData", "HotUpdateDlls", platform);
-
+        private static readonly string Platform = (EditorUserBuildSettings.activeBuildTarget).ToString();
+        private static readonly string ProjectPath = Path.GetDirectoryName(Application.dataPath);
+        private static readonly string DefaultPackage = "DefaultPackage";
+        private static string MetaDataFolder => Path.Combine(ProjectPath, "HybridCLRData", "AssembliesPostIl2CppStrip", Platform);
+        private static string HotUpdateFolder => Path.Combine(ProjectPath, "HybridCLRData", "HotUpdateDlls", Platform);
+        private static string MetaDataResFolder => Path.Combine(Application.dataPath, "GameRes", "Dll", "Metadata");
+        private static string HotUpdateResFolder => Path.Combine(Application.dataPath, "GameRes", "Dll", "HotUpdate");
+        
         [MenuItem("HybridCLR/My/CopyDll", priority = 101)]
         public static void CopyDll()
         {
             foreach (var item in HybridCLRSettings.Instance.hotUpdateAssemblyDefinitions)
             {
-                var filePath = Path.Combine(HotUpdateFolder, item.name + ".dll");
-                var folder = Path.Combine(Application.dataPath, "GameRes", "Dll", "HotUpdate");
-                CopyDllAndRename(filePath, folder);
+                var sourceFilePath = Path.Combine(HotUpdateFolder, item.name + ".dll");
+                CopyDllAndRename(sourceFilePath, HotUpdateResFolder);
             }
 
             foreach (var item in AOTGenericReferences.PatchedAOTAssemblyList)
             {
-                var filePath = Path.Combine(MetaDataFolder, item);
-                var folder = Path.Combine(Application.dataPath, "GameRes", "Dll", "Metadata");
-                CopyDllAndRename(filePath, folder);
+                var sourceFilePath = Path.Combine(MetaDataFolder, item);
+                CopyDllAndRename(sourceFilePath, MetaDataResFolder);
             }
         }
 
-        private static void CopyDllAndRename(string dllFilePath, string targetFolder)
+        private static void CopyDllAndRename(string sourceFilePath, string targetFolder)
         {
-            File.Copy(dllFilePath, Path.Combine(targetFolder, Path.GetFileName(dllFilePath) + ".bytes"), true);
+            var destFileName = Path.Combine(targetFolder, Path.GetFileName(sourceFilePath) + ".bytes");
+            File.Copy(sourceFileName:sourceFilePath, destFileName, true);
         }
 
 
-        [MenuItem("HybridCLR/My/Test", priority = 122)]
-        public static void Test()
+        [MenuItem("HybridCLR/My/LogTest", priority = 200)]
+        public static void LogTest()
         {
-            Debug.Log(AssetBundleBuilderHelper.GetDefaultBuildOutputRoot());
+            GameSettings.Instance.updateVersionNumber++;
+            Debug.Log(GameSettings.Instance.updateVersionNumber);
         }
 
-        [MenuItem("HybridCLR/My/HotUpdateIOS", priority = 121)]
-        public static void HotUpdateIOS()
+        [MenuItem("HybridCLR/My/HotUpdate", priority = 121)]
+        public static void HotUpdate()
         {
             AssetDatabase.Refresh();
+            GameSettings.Instance.updateVersionNumber += 1;
+            AssetDatabase.Refresh();
+            
             CompileDllCommand.CompileDllIOS();
             AssetDatabase.Refresh();
+            
             CopyDll();
             AssetDatabase.Refresh();
-            var appVersionNumber = EditorPrefs.GetInt("appVersion", 1); //大版本
-            var updateVersionNumber = EditorPrefs.GetInt("updateVersion", 1); //小版本
-            var appVersion = "v" + appVersionNumber + "." + 0;
-            var packageVersion = "v" + appVersionNumber + "." + updateVersionNumber; //v1.0 v1.1
-            YooIncrementBuild(EBuildMode.IncrementalBuild, packageVersion);
+            
+            YooIncrementBuild(BuildTarget.iOS, EBuildMode.IncrementalBuild, GameSettings.Instance.PackageVersion);
             AssetDatabase.Refresh();
-            string destinationFolder = Path.Combine(AssetBundleBuilderHelper.GetDefaultBuildOutputRoot(), "iOS",
-                "DefaultPackage", appVersion);
-            string sourceFolder = Path.Combine(AssetBundleBuilderHelper.GetDefaultBuildOutputRoot(), "iOS",
-                "DefaultPackage", packageVersion);
-            CopyAssetToCdn(sourceFolder, destinationFolder);
+            
+            string destinationFolder = Path.Combine(AssetBundleBuilderHelper.GetDefaultBuildOutputRoot(), Platform,
+                DefaultPackage, GameSettings.Instance.AppRootVersion);
+            string sourceFolder = Path.Combine(AssetBundleBuilderHelper.GetDefaultBuildOutputRoot(), Platform,
+                DefaultPackage, GameSettings.Instance.PackageVersion);
+            CopyAssetBundleToCdnFolder(sourceFolder, destinationFolder);
             AssetDatabase.Refresh();
-            EditorPrefs.SetInt("updateVersion", updateVersionNumber + 1);
         }
 
-        static void CopyAssetToCdn(string sourceFolder, string destinationFolder)
+        private static void CopyAssetBundleToCdnFolder(string sourceFolder, string destinationFolder)
         {
             if (!Directory.Exists(sourceFolder)) return;
             if (!Directory.Exists(destinationFolder)) Directory.CreateDirectory(destinationFolder);
@@ -86,27 +87,29 @@ namespace Script.Scripts_Aot.Editor
             }
         }
 
-        public static void YooIncrementBuild(EBuildMode eBuildMode, string packageVersion)
+        private static void YooIncrementBuild(BuildTarget buildTarget, EBuildMode eBuildMode, string packageVersion)
         {
             Debug.Log($"开始构建 : ");
-            var buildoutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
+            var buildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
             var streamingAssetsRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
 
             // 构建参数
-            BuiltinBuildParameters buildParameters = new BuiltinBuildParameters();
-            buildParameters.BuildOutputRoot = buildoutputRoot;
-            buildParameters.BuildinFileRoot = streamingAssetsRoot;
-            buildParameters.BuildPipeline = EBuildPipeline.BuiltinBuildPipeline.ToString();
-            buildParameters.BuildTarget = BuildTarget.iOS;
-            buildParameters.BuildMode = eBuildMode;
-            buildParameters.PackageName = "DefaultPackage";
-            buildParameters.PackageVersion = packageVersion;
-            buildParameters.VerifyBuildingResult = true;
-            buildParameters.EnableSharePackRule = true; //启用共享资源构建模式，兼容1.5x版本
-            buildParameters.FileNameStyle = EFileNameStyle.BundleName;
-            buildParameters.BuildinFileCopyOption = EBuildinFileCopyOption.None;
-            buildParameters.BuildinFileCopyParams = string.Empty;
-            buildParameters.CompressOption = ECompressOption.LZ4;
+            BuiltinBuildParameters buildParameters = new BuiltinBuildParameters
+            {
+                BuildOutputRoot = buildOutputRoot,
+                BuildinFileRoot = streamingAssetsRoot,
+                BuildPipeline = EBuildPipeline.BuiltinBuildPipeline.ToString(),
+                BuildTarget = buildTarget,
+                BuildMode = eBuildMode,
+                PackageName = DefaultPackage,
+                PackageVersion = packageVersion,
+                VerifyBuildingResult = true,
+                EnableSharePackRule = true, //启用共享资源构建模式，兼容1.5x版本
+                FileNameStyle = EFileNameStyle.BundleName,
+                BuildinFileCopyOption = EBuildinFileCopyOption.None,
+                BuildinFileCopyParams = string.Empty,
+                CompressOption = ECompressOption.LZ4
+            };
 
             // 执行构建
             BuiltinBuildPipeline pipeline = new BuiltinBuildPipeline();
@@ -121,16 +124,18 @@ namespace Script.Scripts_Aot.Editor
             }
         }
 
-// 从构建命令里获取参数示例
-        private static string GetBuildPackageName()
-        {
-            foreach (string arg in System.Environment.GetCommandLineArgs())
-            {
-                if (arg.StartsWith("buildPackage"))
-                    return arg.Split("="[0])[1];
-            }
-
-            return string.Empty;
-        }
+        // // 从构建命令里获取参数示例
+        // private static string GetBuildPackageName()
+        // {
+        //     foreach (string arg in System.Environment.GetCommandLineArgs())
+        //     {
+        //         if (arg.StartsWith("buildPackage"))
+        //             return arg.Split("="[0])[1];
+        //     }
+        //
+        //     return string.Empty;
+        // }
+        
+        
     }
 }
