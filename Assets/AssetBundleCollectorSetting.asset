@@ -76,3 +76,16 @@ MonoBehaviour:
         FilterRuleName: CollectSprite
         AssetTags: 
         UserData: 
+    - GroupName: ShaderVar
+      GroupDesc: 
+      AssetTags: ShaderVar
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/ShaderVar
+        CollectorGUID: 644662cf30bde45a1a7c2ef53e8222db
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackShaderVariants
+        FilterRuleName: CollectShaderVariants
+        AssetTags: 
+        UserData: 
