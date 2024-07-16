@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using HybridCLR.Editor.Commands;
 using HybridCLR.Editor.Settings;
@@ -8,8 +9,45 @@ using YooAsset.Editor;
 
 namespace Script.Scripts_Aot.Editor
 {
+    
+    
+    
+    
     public class DllCopyHelper
     {
+        // 保存 List 到 JSON 文件
+        public static void SaveListToJson(List<string> list, string folderName, string fileName)
+        {
+            // 确保文件夹存在
+            string folderPath = Path.Combine(Application.dataPath, folderName);
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            // 将列表转换为 JSON 格式
+            string json = JsonUtility.ToJson(new Serialization<string>(list));
+
+            // 完整的文件路径
+            string filePath = Path.Combine(folderPath, fileName + ".json");
+
+            // 写入文件
+            File.WriteAllText(filePath, json);
+        }
+
+        // 用于 JsonUtility 序列化 List 的辅助类
+        [System.Serializable]
+        private class Serialization<T>
+        {
+            public List<T> list;
+            public Serialization(List<T> list)
+            {
+                this.list = list;
+            }
+        }
+        
+        
+        
         private static readonly string Platform = (EditorUserBuildSettings.activeBuildTarget).ToString();
         private static readonly string ProjectPath = Path.GetDirectoryName(Application.dataPath);
         private static readonly string DefaultPackage = "DefaultPackage";
@@ -50,6 +88,9 @@ namespace Script.Scripts_Aot.Editor
         [MenuItem("HybridCLR/My/Test", priority = 200)]
         public static void Test()
         {
+            Debug.Log("A");
+            List<string> myList = new List<string> { "Item1", "Item2", "Item3" };
+            SaveListToJson(myList, "MyFolder", "MyListFile");
         }
 
 

@@ -86,7 +86,7 @@ public class ToolBarEditor
 
         if (GUILayout.Button(buttonContent))
         {
-            SceneHelper.StartScene("GameMain");
+            SceneHelper.StartScene("Root");
         }
     }
 
