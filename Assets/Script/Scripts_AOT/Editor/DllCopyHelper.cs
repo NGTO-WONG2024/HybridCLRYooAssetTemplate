@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using HybridCLR.Editor.Commands;
 using HybridCLR.Editor.Settings;
@@ -12,11 +13,17 @@ namespace Script.Scripts_Aot.Editor
         private static readonly string Platform = (EditorUserBuildSettings.activeBuildTarget).ToString();
         private static readonly string ProjectPath = Path.GetDirectoryName(Application.dataPath);
         private static readonly string DefaultPackage = "DefaultPackage";
-        private static string MetaDataFolder => Path.Combine(ProjectPath, "HybridCLRData", "AssembliesPostIl2CppStrip", Platform);
+        private static readonly int HeadVersion = int.Parse(PlayerSettings.bundleVersion.Split('.')[0]);
+        private static readonly int UpdateVersion = int.Parse(PlayerSettings.bundleVersion.Split('.')[1]);
+        private static string RootVersion => HeadVersion + ".0";
+
+        private static string MetaDataFolder =>
+            Path.Combine(ProjectPath, "HybridCLRData", "AssembliesPostIl2CppStrip", Platform);
+
         private static string HotUpdateFolder => Path.Combine(ProjectPath, "HybridCLRData", "HotUpdateDlls", Platform);
         private static string MetaDataResFolder => Path.Combine(Application.dataPath, "GameRes", "Dll", "Metadata");
         private static string HotUpdateResFolder => Path.Combine(Application.dataPath, "GameRes", "Dll", "HotUpdate");
-        
+
         [MenuItem("HybridCLR/My/CopyDll", priority = 101)]
         public static void CopyDll()
         {
@@ -36,43 +43,36 @@ namespace Script.Scripts_Aot.Editor
         private static void CopyDllAndRename(string sourceFilePath, string targetFolder)
         {
             var destFileName = Path.Combine(targetFolder, Path.GetFileName(sourceFilePath) + ".bytes");
-            File.Copy(sourceFileName:sourceFilePath, destFileName, true);
+            File.Copy(sourceFileName: sourceFilePath, destFileName, true);
         }
 
 
-        [MenuItem("HybridCLR/My/LogTest", priority = 200)]
-        public static void LogTest()
+        [MenuItem("HybridCLR/My/Test", priority = 200)]
+        public static void Test()
         {
-            GameSettings.Instance.updateVersionNumber++;
-            Debug.Log(GameSettings.Instance.updateVersionNumber);
         }
+
 
         [MenuItem("HybridCLR/My/HotUpdate", priority = 121)]
         public static void HotUpdate()
         {
             AssetDatabase.Refresh();
-            GameSettings.Instance.updateVersionNumber += 1;
-            AssetDatabase.Refresh();
-            
             CompileDllCommand.CompileDllIOS();
-            AssetDatabase.Refresh();
-            
+            string newVersion = HeadVersion + "." + (UpdateVersion + 1);
             CopyDll();
             AssetDatabase.Refresh();
-            
-            YooIncrementBuild(BuildTarget.iOS, EBuildMode.IncrementalBuild, GameSettings.Instance.PackageVersion);
-            AssetDatabase.Refresh();
-            
-            string destinationFolder = Path.Combine(AssetBundleBuilderHelper.GetDefaultBuildOutputRoot(), Platform,
-                DefaultPackage, GameSettings.Instance.AppRootVersion);
-            string sourceFolder = Path.Combine(AssetBundleBuilderHelper.GetDefaultBuildOutputRoot(), Platform,
-                DefaultPackage, GameSettings.Instance.PackageVersion);
-            CopyAssetBundleToCdnFolder(sourceFolder, destinationFolder);
+            YooIncrementBuild(BuildTarget.iOS, EBuildMode.IncrementalBuild, newVersion);
+            CopyAssetBundleToCdnFolder(RootVersion, newVersion);
+            PlayerSettings.bundleVersion = newVersion;
             AssetDatabase.Refresh();
         }
 
-        private static void CopyAssetBundleToCdnFolder(string sourceFolder, string destinationFolder)
+        private static void CopyAssetBundleToCdnFolder(string rootVersion, string newVersion)
         {
+            string destinationFolder = Path.Combine(AssetBundleBuilderHelper.GetDefaultBuildOutputRoot(), Platform,
+                DefaultPackage, rootVersion);
+            string sourceFolder = Path.Combine(AssetBundleBuilderHelper.GetDefaultBuildOutputRoot(), Platform,
+                DefaultPackage, newVersion);
             if (!Directory.Exists(sourceFolder)) return;
             if (!Directory.Exists(destinationFolder)) Directory.CreateDirectory(destinationFolder);
             if (sourceFolder == destinationFolder) return;
@@ -135,7 +135,5 @@ namespace Script.Scripts_Aot.Editor
         //
         //     return string.Empty;
         // }
-        
-        
     }
 }

@@ -54,12 +54,39 @@
     <type fullname="UnityEngine.Rendering.PostProcessing.Vector2Parameter" preserve="all" />
     <type fullname="UnityEngine.Rendering.PostProcessing.Vignette" preserve="all" />
   </assembly>
+  <assembly fullname="Unity.RenderPipelines.Core.Runtime">
+    <type fullname="UnityEngine.Rendering.ClampedFloatParameter" preserve="all" />
+    <type fullname="UnityEngine.Rendering.ColorParameter" preserve="all" />
+    <type fullname="UnityEngine.Rendering.FloatParameter" preserve="all" />
+    <type fullname="UnityEngine.Rendering.MinFloatParameter" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Vector2Parameter" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Volume" preserve="all" />
+    <type fullname="UnityEngine.Rendering.VolumeParameter`1" preserve="all" />
+    <type fullname="UnityEngine.Rendering.VolumeProfile" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.RenderPipelines.Universal.2D.Runtime">
+    <type fullname="UnityEngine.Rendering.Universal.Light2D" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.RenderPipelines.Universal.Runtime">
+    <type fullname="UnityEngine.Rendering.Universal.Bloom" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Universal.ChannelMixer" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Universal.ChromaticAberration" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Universal.ColorAdjustments" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Universal.DepthOfField" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Universal.FilmGrain" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Universal.LensDistortion" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Universal.MotionBlur" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Universal.PaniniProjection" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Universal.Vignette" preserve="all" />
+    <type fullname="UnityEngine.Rendering.Universal.WhiteBalance" preserve="all" />
+  </assembly>
   <assembly fullname="Unity.TextMeshPro">
     <type fullname="TMPro.ShaderUtilities" preserve="all" />
     <type fullname="TMPro.TMP_CharacterInfo" preserve="all" />
     <type fullname="TMPro.TMP_Text" preserve="all" />
     <type fullname="TMPro.TMP_TextInfo" preserve="all" />
     <type fullname="TMPro.TextMeshPro" preserve="all" />
+    <type fullname="TMPro.TextMeshProUGUI" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.AnimationModule">
     <type fullname="UnityEngine.AnimationClip" preserve="all" />
@@ -205,6 +232,7 @@
     <type fullname="UnityEngine.Vector4" preserve="all" />
     <type fullname="UnityEngine.WaitForEndOfFrame" preserve="all" />
     <type fullname="UnityEngine.WaitForSeconds" preserve="all" />
+    <type fullname="UnityEngine.WaitUntil" preserve="all" />
     <type fullname="UnityEngine.iOS.Device" preserve="all" />
     <type fullname="UnityEngine.iOS.DeviceGeneration" preserve="all" />
   </assembly>
@@ -415,6 +443,7 @@
     <type fullname="System.IO.TextReader" preserve="all" />
     <type fullname="System.IO.TextWriter" preserve="all" />
     <type fullname="System.Int32" preserve="all" />
+    <type fullname="System.Int64" preserve="all" />
     <type fullname="System.IntPtr" preserve="all" />
     <type fullname="System.Math" preserve="all" />
     <type fullname="System.MulticastDelegate" preserve="all" />
