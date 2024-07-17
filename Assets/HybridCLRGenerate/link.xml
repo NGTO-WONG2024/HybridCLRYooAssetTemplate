@@ -145,6 +145,7 @@
     <type fullname="UnityEngine.Events.UnityEvent`1" preserve="all" />
     <type fullname="UnityEngine.ExecuteAlways" preserve="all" />
     <type fullname="UnityEngine.ExecuteInEditMode" preserve="all" />
+    <type fullname="UnityEngine.FindObjectsSortMode" preserve="all" />
     <type fullname="UnityEngine.FogMode" preserve="all" />
     <type fullname="UnityEngine.GL" preserve="all" />
     <type fullname="UnityEngine.GameObject" preserve="all" />
@@ -322,6 +323,7 @@
     <type fullname="UnityEngine.UI.Button/ButtonClickedEvent" preserve="all" />
     <type fullname="UnityEngine.UI.CanvasScaler" preserve="all" />
     <type fullname="UnityEngine.UI.Graphic" preserve="all" />
+    <type fullname="UnityEngine.UI.HorizontalLayoutGroup" preserve="all" />
     <type fullname="UnityEngine.UI.Image" preserve="all" />
     <type fullname="UnityEngine.UI.InputField" preserve="all" />
     <type fullname="UnityEngine.UI.InputField/EndEditEvent" preserve="all" />
@@ -498,6 +500,7 @@
     <type fullname="System.Text.Encoding" preserve="all" />
     <type fullname="System.Text.StringBuilder" preserve="all" />
     <type fullname="System.Threading.Interlocked" preserve="all" />
+    <type fullname="System.Threading.Monitor" preserve="all" />
     <type fullname="System.Threading.SendOrPostCallback" preserve="all" />
     <type fullname="System.Threading.SynchronizationContext" preserve="all" />
     <type fullname="System.Threading.Tasks.Task" preserve="all" />

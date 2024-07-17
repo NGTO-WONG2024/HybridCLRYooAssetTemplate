@@ -1,22 +1,18 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using HybridCLR.Editor.Commands;
 using HybridCLR.Editor.Settings;
+using Script.Scripts_AOT;
 using UnityEditor;
 using UnityEngine;
 using YooAsset.Editor;
 
 namespace Script.Scripts_Aot.Editor
 {
-    
-    
-    
-    
     public class DllCopyHelper
     {
         // 保存 List 到 JSON 文件
-        public static void SaveListToJson(List<string> list, string folderName, string fileName)
+        public static void SaveListToJson(DllOrder list, string folderName, string fileName)
         {
             // 确保文件夹存在
             string folderPath = Path.Combine(Application.dataPath, folderName);
@@ -24,26 +20,15 @@ namespace Script.Scripts_Aot.Editor
             {
                 Directory.CreateDirectory(folderPath);
             }
-
             // 将列表转换为 JSON 格式
-            string json = JsonUtility.ToJson(new Serialization<string>(list));
+            string json = JsonUtility.ToJson(list);
 
+            Debug.Log(json);
             // 完整的文件路径
             string filePath = Path.Combine(folderPath, fileName + ".json");
 
             // 写入文件
             File.WriteAllText(filePath, json);
-        }
-
-        // 用于 JsonUtility 序列化 List 的辅助类
-        [System.Serializable]
-        private class Serialization<T>
-        {
-            public List<T> list;
-            public Serialization(List<T> list)
-            {
-                this.list = list;
-            }
         }
         
         
@@ -51,8 +36,8 @@ namespace Script.Scripts_Aot.Editor
         private static readonly string Platform = (EditorUserBuildSettings.activeBuildTarget).ToString();
         private static readonly string ProjectPath = Path.GetDirectoryName(Application.dataPath);
         private static readonly string DefaultPackage = "DefaultPackage";
-        private static readonly int HeadVersion = int.Parse(PlayerSettings.bundleVersion.Split('.')[0]);
-        private static readonly int UpdateVersion = int.Parse(PlayerSettings.bundleVersion.Split('.')[1]);
+        private static int HeadVersion => int.Parse(PlayerSettings.bundleVersion.Split('.')[0]);
+        private static int UpdateVersion => int.Parse(PlayerSettings.bundleVersion.Split('.')[1]);
         private static string RootVersion => HeadVersion + ".0";
 
         private static string MetaDataFolder =>
@@ -88,9 +73,9 @@ namespace Script.Scripts_Aot.Editor
         [MenuItem("HybridCLR/My/Test", priority = 200)]
         public static void Test()
         {
-            Debug.Log("A");
-            List<string> myList = new List<string> { "Item1", "Item2", "Item3" };
-            SaveListToJson(myList, "MyFolder", "MyListFile");
+            var t = new DllOrder();
+            t.dllOrder =  HybridCLRSettings.Instance.hotUpdateAssemblyDefinitions.Select(variable => variable.name).ToList();
+            SaveListToJson(t, Path.Combine("GameRes","Dll","HotUpdate"), "_dllOrder");
         }
 
 
@@ -98,6 +83,14 @@ namespace Script.Scripts_Aot.Editor
         public static void HotUpdate()
         {
             AssetDatabase.Refresh();
+            var t = new DllOrder();
+            foreach (var item in HybridCLRSettings.Instance.hotUpdateAssemblyDefinitions)
+            {
+                t.dllOrder.Add("Assets/GameRes/Dll/HotUpdate/"+item.name+".dll.bytes");
+            }
+            SaveListToJson(t, Path.Combine("GameRes","Dll","HotUpdate"), "_dllOrder");
+            AssetDatabase.Refresh();
+            
             CompileDllCommand.CompileDllIOS();
             string newVersion = HeadVersion + "." + (UpdateVersion + 1);
             CopyDll();

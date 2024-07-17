@@ -13,6 +13,12 @@ namespace Script.Scripts_HotUpdate
         public bool selecting = false;
         public Transform followTarget;
         public bool dragging = false;
+        public Material test;
+
+        private void Start()
+        {
+            UnityEngine.Debug.Log(test.name);
+        }
 
         public void OnPointerClick(PointerEventData eventData)
         {

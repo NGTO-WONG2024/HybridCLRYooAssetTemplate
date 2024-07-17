@@ -89,3 +89,37 @@ MonoBehaviour:
         FilterRuleName: CollectShaderVariants
         AssetTags: 
         UserData: 
+    - GroupName: Prefabs
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/Prefabs
+        CollectorGUID: eaa4e4a579f324f89bb387e64f8a38a9
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+    - GroupName: Shader
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Script/Scripts_HotUpdate/3rd/AllIn1SpriteShader
+        CollectorGUID: 987c03cd4ffead04ead78e0f4647b0fd
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectShader
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Script/Scripts_HotUpdate/3rd/AllIn1SpringsToolkit
+        CollectorGUID: 2d979cf73d0c48b4fae7f14e15039332
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectShader
+        AssetTags: 
+        UserData: 

@@ -86,7 +86,7 @@ public class ToolBarEditor
 
         if (GUILayout.Button(buttonContent))
         {
-            SceneHelper.StartScene("Root");
+            SceneHelper.StartScene("GamePlay");
         }
     }
 
@@ -215,7 +215,7 @@ static class SceneHelper
         string[] allAssetPaths = AssetDatabase.GetAllAssetPaths();
         foreach (string assetPath in allAssetPaths)
         {
-            if (assetPath.EndsWith(".unity"))
+            if (assetPath.EndsWith(".unity") && (assetPath.Contains("GameRes") || assetPath.Contains("Root") ))
             {
                 string name = Path.GetFileNameWithoutExtension(assetPath);
                 sceneNames.Add(name);

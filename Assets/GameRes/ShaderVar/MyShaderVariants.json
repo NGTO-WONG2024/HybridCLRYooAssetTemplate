@@ -1,18 +1,42 @@
 {
-    "ShaderTotalCount": 12,
-    "VariantTotalCount": 12,
+    "ShaderTotalCount": 15,
+    "VariantTotalCount": 15,
     "ShaderVariantInfos": [
         {
-            "AssetPath": "Assets/Script/Scripts_HotUpdate/3rd/AllIn1SpriteShader/Resources/AllIn1SpriteShaderUiMask.shader",
-            "ShaderName": "AllIn1SpriteShader/AllIn1SpriteShaderUiMask",
+            "AssetPath": "Assets/Script/Scripts_HotUpdate/3rd/AllIn1SpringsToolkit/Demo/Shaders/ScrollTexture.shader",
+            "ShaderName": "AllIn1SpringsToolkit/Demo/ScrollTexture",
             "ShaderVariantCount": 1,
             "ShaderVariantElements": [
                 {
                     "PassType": 0,
                     "Keywords": [
-                        "DOODLE_ON",
-                        "GLOW_ON",
-                        "INNEROUTLINE_ON"
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Script/Scripts_HotUpdate/3rd/AllIn1SpringsToolkit/Demo/Shaders/UIGradient.shader",
+            "ShaderName": "AllIn1SpringsToolkit/Demo/UIGradient",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Packages/com.unity.render-pipelines.core/Runtime/RenderPipelineResources/FallbackShader.shader",
+            "ShaderName": "Hidden/Core/FallbackError",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
                     ]
                 }
             ]
@@ -20,6 +44,19 @@
         {
             "AssetPath": "Resources/unity_builtin_extra",
             "ShaderName": "Hidden/BlitCopy",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/BlitCopyHDRTonemap",
             "ShaderVariantCount": 1,
             "ShaderVariantElements": [
                 {

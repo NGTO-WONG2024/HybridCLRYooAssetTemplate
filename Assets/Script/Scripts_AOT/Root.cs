@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using YooAsset;
@@ -7,6 +8,14 @@ using UnityEditor;
 
 namespace Script.Scripts_AOT
 {
+
+    [Serializable]
+    public class DllOrder
+    {
+        public List<string> dllOrder= new();
+    }
+    
+    
     public class Root : MonoBehaviour
     {
         public EPlayMode playMode;
@@ -19,6 +28,9 @@ namespace Script.Scripts_AOT
             var package = await InitYooAsset();
             // 更新资源
             await UpdateAsset(package);
+            
+            
+            
             // 华佗补充元数据+loadDll
             await HybridCLRLoad(package);
             //更新结束 进入GamePlay场景
@@ -170,18 +182,23 @@ namespace Script.Scripts_AOT
                 byte[] dllBytes = textAsset.bytes;
                 HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HybridCLR.HomologousImageMode.SuperSet);
             }
-
-            //华佗LoadDll
-            foreach (var assetInfo in package.GetAssetInfos("HotUpdate"))
+            
+            
+            AssetHandle jsonHandler = package.LoadAssetAsync<TextAsset>("Assets/GameRes/Dll/HotUpdate/_dllOrder.json");
+            await jsonHandler.Task;
+            TextAsset json = jsonHandler.AssetObject as TextAsset;
+            var dllOrder = JsonUtility.FromJson<DllOrder>(json.text).dllOrder;
+            foreach (var variable in dllOrder)
             {
-                Debug.Log("HotUpdate: " + assetInfo.AssetPath);
-                AssetHandle handle = package.LoadAssetAsync<TextAsset>(assetInfo.AssetPath);
+                AssetHandle handle = package.LoadAssetAsync<TextAsset>(variable);
                 await handle.Task;
                 TextAsset textAsset = handle.AssetObject as TextAsset;
                 if (textAsset == null) continue;
                 byte[] dllBytes = textAsset.bytes;
                 Assembly.Load(dllBytes);
+                
             }
+
         }
     }
 }
