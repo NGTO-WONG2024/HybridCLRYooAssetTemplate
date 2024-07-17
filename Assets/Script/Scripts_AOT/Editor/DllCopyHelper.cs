@@ -78,7 +78,6 @@ namespace Script.Scripts_Aot.Editor
             SaveListToJson(t, Path.Combine("GameRes","Dll","HotUpdate"), "_dllOrder");
         }
 
-
         [MenuItem("HybridCLR/My/HotUpdate", priority = 121)]
         public static void HotUpdate()
         {
@@ -90,7 +89,6 @@ namespace Script.Scripts_Aot.Editor
             }
             SaveListToJson(t, Path.Combine("GameRes","Dll","HotUpdate"), "_dllOrder");
             AssetDatabase.Refresh();
-            
             CompileDllCommand.CompileDllIOS();
             string newVersion = HeadVersion + "." + (UpdateVersion + 1);
             CopyDll();

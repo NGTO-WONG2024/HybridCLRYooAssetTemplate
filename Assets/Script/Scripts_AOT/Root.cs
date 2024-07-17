@@ -8,13 +8,11 @@ using UnityEditor;
 
 namespace Script.Scripts_AOT
 {
-
     [Serializable]
     public class DllOrder
     {
         public List<string> dllOrder= new();
     }
-    
     
     public class Root : MonoBehaviour
     {
@@ -28,9 +26,6 @@ namespace Script.Scripts_AOT
             var package = await InitYooAsset();
             // 更新资源
             await UpdateAsset(package);
-            
-            
-            
             // 华佗补充元数据+loadDll
             await HybridCLRLoad(package);
             //更新结束 进入GamePlay场景
@@ -182,8 +177,6 @@ namespace Script.Scripts_AOT
                 byte[] dllBytes = textAsset.bytes;
                 HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HybridCLR.HomologousImageMode.SuperSet);
             }
-            
-            
             AssetHandle jsonHandler = package.LoadAssetAsync<TextAsset>("Assets/GameRes/Dll/HotUpdate/_dllOrder.json");
             await jsonHandler.Task;
             TextAsset json = jsonHandler.AssetObject as TextAsset;

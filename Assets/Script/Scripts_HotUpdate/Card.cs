@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,44 +10,88 @@ namespace Script.Scripts_HotUpdate
 {
     public class Card : MonoBehaviour, IPointerClickHandler, IDragHandler , IEndDragHandler , IBeginDragHandler
     {
+        public Card parent = null;
+        public Card child = null;
+        
         public int rank = 10;
         public int color;
-        public bool selecting = false;
-        public Transform followTarget;
+        public MMFollowTarget followTarget;
         public bool dragging = false;
-        public Material test;
+        public MMF_Player destroyFeelBack;
 
-        private void Start()
+        public Card GetHead()
         {
-            UnityEngine.Debug.Log(test.name);
+            return parent == null ? this : parent.GetHead();
+        }
+        
+        public Card GetTail()
+        {
+            return child == null ? this : child.GetTail();
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public void DestroyMe()
         {
-            if (dragging) return;
-            selecting = !selecting;
-        }
-
-        private void Update()
-        {
-            GetComponent<MMFollowTarget>().Offset = new Vector3(0, selecting ? 150 : 0, 0);
+            destroyFeelBack.PlayFeedbacks();
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            followTarget.position = eventData.position;
+            transform.position = eventData.position;
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            followTarget.GetComponentInParent<HorizontalLayoutGroup>().enabled = false;
-            followTarget.GetComponentInParent<HorizontalLayoutGroup>().enabled = true;
-            dragging = false;
+            List<RaycastResult> results = new List<RaycastResult>();
+            var t = this.GetComponentInParent<GraphicRaycaster>();
+            t.Raycast(eventData, results);
+
+            Card dragStopCard = null;
+            foreach (RaycastResult result in results)
+            {
+                if (result.gameObject.TryGetComponent<Card>(out dragStopCard))
+                {
+                    if (dragStopCard == this) continue;
+                    if (dragStopCard == child) continue;
+                    break;
+                }
+            }
+
+            if (dragStopCard != null)
+            {
+                if (parent) parent.child = null;
+                parent = null;
+                var tail = dragStopCard.GetTail();
+                tail.child = this;
+                parent = tail;
+                followTarget.Target = parent == null ? null : parent.transform;
+                transform.SetSiblingIndex(parent == null ? 0 : parent.transform.GetSiblingIndex() + 1);
+            }
+            
+
+            //
+            // //;
+            //
+            // if (dragStopCard != null)
+            // {
+            //     parent = dragStopCard;
+            //     dragStopCard.child = this;
+            //     child = null;
+            // }
+            // else
+            // {
+            //     parent = null;
+            // }
+            // followTarget.Target = parent == null ? null : parent.transform;
+            followTarget.enabled = true;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            dragging = true;
+            followTarget.enabled = false;
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
         }
     }
 }
