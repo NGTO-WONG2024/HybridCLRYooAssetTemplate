@@ -65,6 +65,7 @@ namespace Script.Scripts_HotUpdate
                 parent = tail;
                 followTarget.Target = parent == null ? null : parent.transform;
                 transform.SetSiblingIndex(parent == null ? 0 : parent.transform.GetSiblingIndex() + 1);
+                SortCanvas();
             }
             
 
@@ -83,6 +84,25 @@ namespace Script.Scripts_HotUpdate
             // }
             // followTarget.Target = parent == null ? null : parent.transform;
             followTarget.enabled = true;
+        }
+
+        private void SortCanvas()
+        {
+            var head= GetHead();
+            var node = head;
+            while (true)
+            {
+                Debug.Log(node.gameObject);
+                if (node.child==null)
+                {
+                    break;
+                }
+                else
+                {
+                    node = node.child;
+                }
+            }
+            
         }
 
         public void OnBeginDrag(PointerEventData eventData)
