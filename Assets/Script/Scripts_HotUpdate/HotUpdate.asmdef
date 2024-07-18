@@ -2,7 +2,8 @@
     "name": "HotUpdate",
     "rootNamespace": "",
     "references": [
-        "MoreMountains.Tools"
+        "MoreMountains.Tools",
+        "YooAsset"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

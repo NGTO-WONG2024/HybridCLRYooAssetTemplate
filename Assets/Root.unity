@@ -547,7 +547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 344b688e242a44c38b65f40f93cff5c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playMode: 2
+  playMode: 0
   hostServerIP: http://192.168.100.210:8080
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -46,8 +46,7 @@ namespace Script.Scripts_HotUpdate
             for (int i = handCards.Count; i < handCardLimit; i++)
             {
                 Card card = Instantiate(cardPrefab,this.transform);
-                //card.followTarget.SetParent(handArea.transform);
-                handCards.Add(card);
+                card.SetUp((Card.Rank)i,(Card.Suit)Random.Range(0, 4), null);
                 await Task.Delay(100);
             }
         }
@@ -65,7 +64,7 @@ namespace Script.Scripts_HotUpdate
             var score = 0;
             foreach (var card in selectingCards)
             {
-                score += card.rank;
+                score += (int)card.rank;
                 await Task.Delay(100);
             }
             currentScore = score;
