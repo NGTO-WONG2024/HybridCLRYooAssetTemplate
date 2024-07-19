@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using DG.Tweening;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -10,7 +8,7 @@ using YooAsset;
 
 namespace Script.Scripts_HotUpdate
 {
-    public class Card : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragHandler, IBeginDragHandler
+    public class Card : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragHandler, IBeginDragHandler, IDropArea
     {
         public enum Suit
         {
@@ -36,6 +34,7 @@ namespace Script.Scripts_HotUpdate
             King,
             Ace
         }
+
         public enum BackGround
         {
             Normal,
@@ -45,21 +44,24 @@ namespace Script.Scripts_HotUpdate
         public Card child = null;
         public Rank rank;
         public Suit suit;
-        private MMFollowTarget followTarget;
+        public MMFollowTarget followTarget;
         public MMF_Player destroyFeelBack;
         public MMF_Player flipFellBack;
         public GameObject front;
         public GameObject back;
-        public bool isFront = true;
         public Image rankImage;
         public Image frontBgImage;
 
-        public async void SetUp(Rank pRank, Suit pSuit, Card pParent)
+        public async void SetUp(Rank pRank, Suit pSuit, Card pParent = null, Transform initFollowTarget = null)
         {
             parent = pParent;
             rank = pRank;
             suit = pSuit;
             followTarget = GetComponent<MMFollowTarget>();
+            if (initFollowTarget != null)
+            {
+                followTarget.Target = initFollowTarget;
+            }
 
             var package = YooAssets.GetPackage("DefaultPackage");
             var handle = package.LoadSubAssetsAsync<Sprite>("Assets/GameRes/Art/8BitDeck_opt2");
@@ -82,11 +84,8 @@ namespace Script.Scripts_HotUpdate
         {
             if (node1 == null || node2 == null)
                 return false;
-
             if (node1 == node2)
                 return true;
-
-            // Search backwards from node1
             Card current = node1;
             while (current.parent != null)
             {
@@ -95,57 +94,27 @@ namespace Script.Scripts_HotUpdate
                     return true;
             }
 
-            // Search forwards from node1
-            current = node1;
-            while (current.child != null)
-            {
-                current = current.child;
-                if (current == node2)
-                    return true;
-            }
-
             return false;
-        }
-
-        public void DestroyMe()
-        {
-            destroyFeelBack.PlayFeedbacks();
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            transform.position = eventData.position;
+            transform.position = new Vector3(eventData.position.x, eventData.position.y, transform.position.z);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
             List<RaycastResult> results = new List<RaycastResult>();
-            var t = this.GetComponentInParent<GraphicRaycaster>();
-            t.Raycast(eventData, results);
+            GetComponentInParent<GraphicRaycaster>().Raycast(eventData, results);
 
             foreach (RaycastResult result in results)
             {
-                if (result.gameObject.TryGetComponent<Card>(out var card))
-                {
-                    if (AreRelated(card, this)) continue;
-                    if (parent) parent.child = null;
-                    parent = null;
-                    var tail = card.GetTail();
-                    tail.child = this;
-                    parent = tail;
-                    followTarget.Target = parent == null ? null : parent.transform;
-                    SortCanvas();
-                    break;
-                }
-
-                if (result.gameObject.name.Equals("RollArea"))
-                {
-                    Debug.Log("Roll");
-                    followTarget.Target = result.gameObject.transform.GetChild(0);
-                }
-                
+                if (result.gameObject == gameObject) continue;
+                var dropArea = result.gameObject.GetComponent<IDropArea>();
+                if (dropArea == null) continue;
+                dropArea.HandleDrop(this);
+                break;
             }
-
 
             followTarget.enabled = true;
         }
@@ -153,10 +122,9 @@ namespace Script.Scripts_HotUpdate
         private void SortCanvas()
         {
             var node = this;
-            while (true)
+            while (node != null)
             {
                 node.transform.SetSiblingIndex(int.MaxValue);
-                if (node.child == null) break;
                 node = node.child;
             }
         }
@@ -172,5 +140,16 @@ namespace Script.Scripts_HotUpdate
             flipFellBack.PlayFeedbacks();
         }
 
+        public void HandleDrop(Card card)
+        {
+            if (AreRelated(card, this)) return;
+            if (parent) parent.child = null;
+            parent = null;
+            var tail = card.GetTail();
+            tail.child = this;
+            parent = tail;
+            followTarget.Target = parent == null ? null : parent.transform;
+            SortCanvas();
+        }
     }
 }

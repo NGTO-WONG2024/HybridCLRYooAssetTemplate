@@ -1,16 +1,12 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MoreMountains.Feedbacks;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Script.Scripts_HotUpdate
 {
     public class Balatro : SingletonMonoBehaviour<Balatro>
     {
         #region Variables
+        [Header("Variables")]
         public int randomSeed = 0;
         public int handCardLimit = 5;
         public List<Card> handCards = new List<Card>();
@@ -22,63 +18,71 @@ namespace Script.Scripts_HotUpdate
         
         #endregion
 
-        #region MonoObjects
-
+        #region UnityBehaviour
+        [Header("UnityBehaviour")]
         [SerializeField] private Card cardPrefab;
-        [SerializeField] private GameObject menuObj;
-        [SerializeField] private GameObject handArea;
-        [SerializeField] private GameObject checkScoreArea;
-        [SerializeField] private GameObject gamePlayObj;
-        [SerializeField] public MMFloatingTextMeshPro text;
-
+        [SerializeField] private Transform deckPos;
+        [SerializeField] private Transform cards;
         #endregion
 
         #region Methods
-        
-        public async void StartNewGame()
+
+        public List<Card> CreatDeck()
         {
-            Random.InitState(randomSeed != 0 ? randomSeed : DateTime.Now.GetHashCode());
-            DrawCards();
+            List<Card> deck = new List<Card>();
+            for (int i = 0; i < 52; i++)
+            {
+                var temp= Instantiate(cardPrefab,cards);
+                temp.SetUp((Card.Rank)(i % 13), (Card.Suit)(i / 13), null,deckPos);
+                deck.Add(temp);
+            }
+            return deck;
         }
 
-        public async void DrawCards()
+        private void Start()
         {
-            for (int i = handCards.Count; i < handCardLimit; i++)
-            {
-                Card card = Instantiate(cardPrefab,this.transform);
-                card.SetUp((Card.Rank)i,(Card.Suit)Random.Range(0, 4), null);
-                await Task.Delay(100);
-            }
+            CreatDeck();
         }
 
-        public async void PlayCards()
-        {
-            var selectingCards = handCards.Where(card => card).ToList();
-            if (selectingCards.Count == 0) return;
-            foreach (var card in selectingCards)
-            {
-                //card.followTarget.SetParent(checkScoreArea.transform);
-                await Task.Delay(100);
-            }
 
-            var score = 0;
-            foreach (var card in selectingCards)
-            {
-                score += (int)card.rank;
-                await Task.Delay(100);
-            }
-            currentScore = score;
-            handCards = handCards.Except(selectingCards).ToList();
-            await Task.Delay(100);
-            for (int i = selectingCards.Count - 1; i >= 0; i--)
-            {
-                await Task.Delay(100);
-                selectingCards[i].DestroyMe();
-            }
-        }
-        
-        
-
+        // public async void DrawCards()
+        // {
+        //     for (int i = handCards.Count; i < handCardLimit; i++)
+        //     {
+        //         Card card = Instantiate(cardPrefab,this.transform);
+        //         card.SetUp((Card.Rank)i,(Card.Suit)Random.Range(0, 4), null,null);
+        //         await Task.Delay(100);
+        //     }
+        // }
+        //
+        // public async void PlayCards()
+        // {
+        //     var selectingCards = handCards.Where(card => card).ToList();
+        //     if (selectingCards.Count == 0) return;
+        //     foreach (var card in selectingCards)
+        //     {
+        //         //card.followTarget.SetParent(checkScoreArea.transform);
+        //         await Task.Delay(100);
+        //     }
+        //
+        //     var score = 0;
+        //     foreach (var card in selectingCards)
+        //     {
+        //         score += (int)card.rank;
+        //         await Task.Delay(100);
+        //     }
+        //     currentScore = score;
+        //     handCards = handCards.Except(selectingCards).ToList();
+        //     await Task.Delay(100);
+        //     for (int i = selectingCards.Count - 1; i >= 0; i--)
+        //     {
+        //         await Task.Delay(100);
+        //         selectingCards[i].DestroyMe();
+        //     }
+        // }
+        //
+        //
+        //
 
         #endregion
         

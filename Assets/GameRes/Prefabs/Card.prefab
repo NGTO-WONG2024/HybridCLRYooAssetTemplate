@@ -903,13 +903,13 @@ MonoBehaviour:
   child: {fileID: 0}
   rank: 10
   suit: 0
-  dragging: 0
   destroyFeelBack: {fileID: 3839283964924682789}
   flipFellBack: {fileID: 8180943870837290557}
-  rankImage: {fileID: 4729124137995032900}
   front: {fileID: 6440012551406816220}
   back: {fileID: 3987307892418193266}
   isFront: 1
+  rankImage: {fileID: 4729124137995032900}
+  frontBgImage: {fileID: 1072136196826184647}
 --- !u!114 &4094151305840161820
 MonoBehaviour:
   m_ObjectHideFlags: 0
