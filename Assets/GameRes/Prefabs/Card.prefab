@@ -800,6 +800,7 @@ GameObject:
   - component: {fileID: 9079810495875232140}
   - component: {fileID: 4094151305840161820}
   - component: {fileID: 1859668357314017553}
+  - component: {fileID: 1328450552887742679}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -903,11 +904,11 @@ MonoBehaviour:
   child: {fileID: 0}
   rank: 10
   suit: 0
+  followTarget: {fileID: 0}
   destroyFeelBack: {fileID: 3839283964924682789}
   flipFellBack: {fileID: 8180943870837290557}
   front: {fileID: 6440012551406816220}
   back: {fileID: 3987307892418193266}
-  isFront: 1
   rankImage: {fileID: 4729124137995032900}
   frontBgImage: {fileID: 1072136196826184647}
 --- !u!114 &4094151305840161820
@@ -980,6 +981,18 @@ MonoBehaviour:
   DebugMode: 0
   ScaleValue: 0
   BackVisible: 0
+--- !u!225 &1328450552887742679
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4342259130564881478}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &5992504624268783559
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,14 +4,13 @@ using UnityEngine.UI;
 namespace Script.Scripts_HotUpdate
 {
     [RequireComponent(typeof(Image))]
-    public class EmptySlot : MonoBehaviour , IDropArea
+    public class EmptySlot : DropAbleObject<Card>
     {
-        public void HandleDrop(Card card)
+        protected override void OnDrop(Card card)
         {
             Debug.Log("EmptySlot");
-            if (card.parent) card.parent.child = null;
-            card.parent = null;
             card.followTarget.Target = transform.gameObject.transform.GetChild(0);
+            Debug.Log("物体已放置在Drop Zone中! 物体名字: " + card.name);
         }
     }
 }

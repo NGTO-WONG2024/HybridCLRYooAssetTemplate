@@ -1,16 +1,15 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Script.Scripts_HotUpdate
 {    
     [RequireComponent(typeof(Image))]
-    public class CheckArea : MonoBehaviour , IDropArea
+    public class CheckArea : DropAbleObject<Card>
     {
-        public void HandleDrop(Card card)
+        protected override void OnDrop(Card obj)
         {
-            if (card.parent) card.parent.child = null;
-            card.parent = null;
-            card.followTarget.Target = transform.gameObject.transform.GetChild(0);
+            obj.followTarget.Target = transform;
         }
     }
 }

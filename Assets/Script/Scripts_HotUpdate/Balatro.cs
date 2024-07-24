@@ -33,7 +33,7 @@ namespace Script.Scripts_HotUpdate
             for (int i = 0; i < 52; i++)
             {
                 var temp= Instantiate(cardPrefab,cards);
-                temp.SetUp((Card.Rank)(i % 13), (Card.Suit)(i / 13), null,deckPos);
+                temp.SetUp((Card.Rank)(i % 13), (Card.Suit)(i / 13),deckPos);
                 deck.Add(temp);
             }
             return deck;
