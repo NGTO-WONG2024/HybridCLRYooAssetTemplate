@@ -58,20 +58,20 @@ namespace Script.Scripts_HotUpdate
         /// <returns></returns>
         public async void RollCards()
         {
-            for (int i = 0; i < tableCardLimit; i++)
+            while (true)
             {
                 if (tableArea.childCount == 0) break;
-                var card = tableArea.GetChild(0).transform;
+                var card = tableArea.GetChild(tableArea.childCount - 1).transform;
                 card.SetParent(outArea);
                 card.localPosition = Vector3.zero;
                 await Task.Delay(200);
             }
-            
-            for (int i = 0; i < tableCardLimit; i++)
+
+            while (true)
             {
                 if (tableArea.childCount == tableCardLimit) break;
                 if (deckArea.childCount == 0) break;
-                var card = deckArea.GetChild(0).transform;
+                var card = deckArea.GetChild(deckArea.childCount - 1).transform;
                 card.SetParent(tableArea);
                 card.localPosition= Vector3.zero;
                 await Task.Delay(200);
@@ -81,6 +81,25 @@ namespace Script.Scripts_HotUpdate
         private void Start()
         {
             CreatDeck();
+        }
+
+
+        public async void PlayCard()
+        {
+            var cards = handArea.GetComponentsInChildren<Card>();
+            tableArea.Translate(new Vector3(0,1000,0));
+            await Task.Delay(1000);
+            handArea.Translate(new Vector3(0,500,0));
+            await Task.Delay(1000);
+            foreach (var card in cards)
+            {
+                await card.PlayFeelAsync("count");
+            }
+            await Task.Delay(1000);
+            handArea.Translate(new Vector3(0,-500,0));
+            await Task.Delay(1000);
+            tableArea.Translate(new Vector3(0,-1000,0));
+
         }
 
         #endregion

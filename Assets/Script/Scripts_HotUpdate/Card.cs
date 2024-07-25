@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -74,7 +75,7 @@ namespace Script.Scripts_HotUpdate
         {
             if (transform.parent == Balatro.Instance.handArea)
             {
-                if (Balatro.Instance.tableArea.childCount >= Balatro.Instance.tableCardLimit) return;
+                //if (Balatro.Instance.tableArea.childCount >= Balatro.Instance.tableCardLimit) return;
                 transform.SetParent(Balatro.Instance.tableArea);
                 transform.localPosition = Vector3.zero;
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.root.GetComponent<RectTransform>());
@@ -89,8 +90,13 @@ namespace Script.Scripts_HotUpdate
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.root.GetComponent<RectTransform>());
                 return;
             }
-
         }
-        
+
+
+        public async Task PlayFeelAsync(string feelName)
+        {
+            mmfPlayers[feelName].PlayFeedbacks();
+            await Task.Delay((int)(mmfPlayers[feelName].TotalDuration * 1000));
+        }
     }
 }
