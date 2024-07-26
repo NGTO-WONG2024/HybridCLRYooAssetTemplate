@@ -24,7 +24,6 @@ namespace Script.Scripts_HotUpdate
         {
             mmfPlayers = GetComponentsInChildren<MMF_Player>().ToDictionary(x => x.name, x => x);
             images = GetComponentsInChildren<Image>().ToDictionary(x => x.name, x => x);
-            //buttons = GetComponentsInChildren<Button>().ToDictionary(x => x.name, x => x);
             texts = GetComponentsInChildren<TextMeshProUGUI>().ToDictionary(x => x.name, x => x);
             view = transform.GetChild(0);
             view.SetParent(Balatro.Instance.cardViewsParent);

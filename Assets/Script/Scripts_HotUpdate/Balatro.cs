@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -10,7 +11,8 @@ namespace Script.Scripts_HotUpdate
     {
         #region Variables
 
-        [Header("Variables")] public int randomSeed = 0;
+        [Header("Variables")] 
+        public int randomSeed = 1;
         public int handCardLimit = 5;
         public int tableCardLimit = 5;
         public int round = 0;
@@ -23,20 +25,35 @@ namespace Script.Scripts_HotUpdate
 
         #region UnityBehaviour
 
-        [FormerlySerializedAs("cardPrefab")] [Header("UnityBehaviour")] 
+        [Header("UnityBehaviour")] 
         public StudentCard studentCardPrefab;
 
-        public Transform cardViewsParent;
-        public Transform deckArea;
-        public Transform tableArea; 
-        public Transform outArea; 
-        public Transform handArea;
-        public Transform senseiArea;
+        
+        public Transform cardViewsParent => rectTransforms["cardViewsParent"];
+        public Transform deckArea => rectTransforms["deckArea"];
+        public Transform tableArea => rectTransforms["tableArea"];
+
+        public Transform outArea => rectTransforms["outArea"];
+        public Transform handArea => rectTransforms["handArea"];
+        public Transform senseiArea => rectTransforms["senseiArea"];
+        
+        
+        StudentCard[] studentCards => handArea.GetComponentsInChildren<StudentCard>();
+        SenseiCard[] senseiCards => senseiArea.GetComponentsInChildren<SenseiCard>();
 
         #endregion
 
         #region Methods
 
+        private Dictionary<string, RectTransform> rectTransforms;
+        private async void Start()
+        {            
+            Random.InitState(randomSeed);
+            rectTransforms = GetComponentsInChildren<RectTransform>().ToDictionary(x => x.name, x => x);
+            await CreatDeck();
+        }
+        
+        
         /// <summary>
         /// 创建卡组
         /// </summary>
@@ -75,23 +92,18 @@ namespace Script.Scripts_HotUpdate
             {
                 if (tableArea.childCount == tableCardLimit) break;
                 if (deckArea.childCount == 0) break;
-                var card = deckArea.GetChild(deckArea.childCount - 1).transform;
+                var random = Random.Range(0, deckArea.childCount );
+                var card = deckArea.GetChild(random).transform;
                 card.SetParent(tableArea);
                 card.localPosition= Vector3.zero;
                 await Task.Delay((int)(200 / Time.timeScale));
             }
         }
 
-        private void Start()
-        {
-            CreatDeck();
-        }
 
 
         public async void PlayCard()
         {
-            var studentCards = handArea.GetComponentsInChildren<StudentCard>();
-            var senseiCards = senseiArea.GetComponentsInChildren<SenseiCard>();
             tableArea.Translate(new Vector3(0,1000,0));
             await Task.Delay((int)(1000 / Time.timeScale));
             handArea.Translate(new Vector3(0,500,0));
@@ -110,6 +122,11 @@ namespace Script.Scripts_HotUpdate
             await Task.Delay((int)(1000 / Time.timeScale));
             tableArea.Translate(new Vector3(0,-1000,0));
 
+        }
+
+        public void TimeScale(float v)
+        {
+            Time.timeScale = v;
         }
 
         #endregion

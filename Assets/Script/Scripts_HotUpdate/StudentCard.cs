@@ -28,6 +28,7 @@ namespace Script.Scripts_HotUpdate
             {
                 transform.SetParent(Balatro.Instance.tableArea);
                 transform.localPosition = Vector3.zero;
+                Debug.Log("A");
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.root.GetComponent<RectTransform>());
                 return;
             }
@@ -37,6 +38,7 @@ namespace Script.Scripts_HotUpdate
                 if (Balatro.Instance.handArea.childCount >= Balatro.Instance.handCardLimit) return;
                 transform.SetParent(Balatro.Instance.handArea);
                 transform.localPosition = Vector3.zero;
+                Debug.Log("B");
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.root.GetComponent<RectTransform>());
                 return;
             }
