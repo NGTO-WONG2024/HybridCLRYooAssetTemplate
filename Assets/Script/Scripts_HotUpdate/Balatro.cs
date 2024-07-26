@@ -68,7 +68,7 @@ namespace Script.Scripts_HotUpdate
                 var card = tableArea.GetChild(tableArea.childCount - 1).transform;
                 card.SetParent(outArea);
                 card.localPosition = Vector3.zero;
-                await Task.Delay(200);
+                await Task.Delay((int)(200 / Time.timeScale));
             }
 
             while (true)
@@ -78,7 +78,7 @@ namespace Script.Scripts_HotUpdate
                 var card = deckArea.GetChild(deckArea.childCount - 1).transform;
                 card.SetParent(tableArea);
                 card.localPosition= Vector3.zero;
-                await Task.Delay(200);
+                await Task.Delay((int)(200 / Time.timeScale));
             }
         }
 
@@ -93,9 +93,9 @@ namespace Script.Scripts_HotUpdate
             var studentCards = handArea.GetComponentsInChildren<StudentCard>();
             var senseiCards = senseiArea.GetComponentsInChildren<SenseiCard>();
             tableArea.Translate(new Vector3(0,1000,0));
-            await Task.Delay(1000);
+            await Task.Delay((int)(1000 / Time.timeScale));
             handArea.Translate(new Vector3(0,500,0));
-            await Task.Delay(1000);
+            await Task.Delay((int)(1000 / Time.timeScale));
             foreach (var card in studentCards)
             {
                 foreach (var senseiCard in senseiCards)
@@ -105,9 +105,9 @@ namespace Script.Scripts_HotUpdate
                 }
                 await card.PlayFeelAsync("count");
             }
-            await Task.Delay(1000);
+            await Task.Delay((int)(1000 / Time.timeScale));
             handArea.Translate(new Vector3(0,-500,0));
-            await Task.Delay(1000);
+            await Task.Delay((int)(1000 / Time.timeScale));
             tableArea.Translate(new Vector3(0,-1000,0));
 
         }
