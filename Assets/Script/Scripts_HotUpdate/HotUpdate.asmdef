@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "MoreMountains.Tools",
-        "YooAsset"
+        "YooAsset",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

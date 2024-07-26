@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityEngine;
-using YooAsset;
+using UnityEngine.Serialization;
 
 namespace Script.Scripts_HotUpdate
 {
@@ -23,14 +23,15 @@ namespace Script.Scripts_HotUpdate
 
         #region UnityBehaviour
 
-        [Header("UnityBehaviour")] 
-        public Card cardPrefab;
+        [FormerlySerializedAs("cardPrefab")] [Header("UnityBehaviour")] 
+        public StudentCard studentCardPrefab;
 
         public Transform cardViewsParent;
         public Transform deckArea;
         public Transform tableArea; 
         public Transform outArea; 
         public Transform handArea;
+        public Transform senseiArea;
 
         #endregion
 
@@ -42,17 +43,14 @@ namespace Script.Scripts_HotUpdate
         /// <returns></returns>
         public async Task CreatDeck()
         {
-            var package = YooAssets.GetPackage("DefaultPackage");
-            // 注意：location只需要填写资源包里的任意资源地址。
-            var handle = package.LoadAllAssetsAsync<StudentData>("Assets/GameRes/SO/266px-Airi.asset");
-            await handle.Task;
-            var t = handle.AllAssetObjects;
-
-            List<Card> deck = new List<Card>();
-            foreach (var o in t)
+            string jsonString =(await ResManager.Instance.Load<TextAsset>("Assets/GameRes/SO/Student.json")).text;
+            Dictionary<string, StudentData> characters = JsonConvert.DeserializeObject<Dictionary<string, StudentData>>(jsonString);
+            var t = characters;
+            List<StudentCard> deck = new List<StudentCard>();
+            foreach (var kv in t)
             {
-                var studentData = (StudentData)o;
-                var temp = Instantiate(cardPrefab, deckArea);
+                var studentData = kv.Value;
+                var temp = Instantiate(studentCardPrefab, deckArea);
                 temp.SetUp(studentData, deckArea);
                 deck.Add(temp);
             }
@@ -92,13 +90,19 @@ namespace Script.Scripts_HotUpdate
 
         public async void PlayCard()
         {
-            var cards = handArea.GetComponentsInChildren<Card>();
+            var studentCards = handArea.GetComponentsInChildren<StudentCard>();
+            var senseiCards = senseiArea.GetComponentsInChildren<SenseiCard>();
             tableArea.Translate(new Vector3(0,1000,0));
             await Task.Delay(1000);
             handArea.Translate(new Vector3(0,500,0));
             await Task.Delay(1000);
-            foreach (var card in cards)
+            foreach (var card in studentCards)
             {
+                foreach (var senseiCard in senseiCards)
+                {
+                    var t = senseiCard.Buff_BeforeAttack(card.studentData);
+                    Debug.Log("buffed" + t.attack);
+                }
                 await card.PlayFeelAsync("count");
             }
             await Task.Delay(1000);

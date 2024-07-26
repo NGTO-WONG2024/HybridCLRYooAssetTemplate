@@ -229,7 +229,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!114 &206035866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,12 +325,13 @@ MonoBehaviour:
   currentScore: 0
   playCardCount: 0
   rollCardCount: 0
-  cardPrefab: {fileID: 9079810495875232140, guid: a154a4883909f42ef8ac0e6c6246e50c, type: 3}
+  studentCardPrefab: {fileID: 9079810495875232140, guid: a154a4883909f42ef8ac0e6c6246e50c, type: 3}
   cardViewsParent: {fileID: 250351790}
   deckArea: {fileID: 1922769410}
   tableArea: {fileID: 1369045964}
   outArea: {fileID: 323196694}
   handArea: {fileID: 1116162238}
+  senseiArea: {fileID: 0}
 --- !u!1 &250351789
 GameObject:
   m_ObjectHideFlags: 0
