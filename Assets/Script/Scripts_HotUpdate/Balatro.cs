@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using YooAsset;
 
 namespace Script.Scripts_HotUpdate
 {
@@ -39,17 +40,22 @@ namespace Script.Scripts_HotUpdate
         /// 创建卡组
         /// </summary>
         /// <returns></returns>
-        public List<Card> CreatDeck()
+        public async Task CreatDeck()
         {
+            var package = YooAssets.GetPackage("DefaultPackage");
+            // 注意：location只需要填写资源包里的任意资源地址。
+            var handle = package.LoadAllAssetsAsync<StudentData>("Assets/GameRes/SO/266px-Airi.asset");
+            await handle.Task;
+            var t = handle.AllAssetObjects;
+
             List<Card> deck = new List<Card>();
-            for (int i = 0; i < 52; i++)
+            foreach (var o in t)
             {
+                var studentData = (StudentData)o;
                 var temp = Instantiate(cardPrefab, deckArea);
-                temp.SetUp((Card.Rank)(i % 13), (Card.Suit)(i / 13), deckArea);
+                temp.SetUp(studentData, deckArea);
                 deck.Add(temp);
             }
-
-            return deck;
         }
         
         /// <summary>

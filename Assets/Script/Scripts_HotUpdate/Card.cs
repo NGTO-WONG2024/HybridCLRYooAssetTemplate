@@ -52,22 +52,16 @@ namespace Script.Scripts_HotUpdate
         private Dictionary<string, MMF_Player> mmfPlayers;
         private Dictionary<string, Image> images;
 
-        public async void SetUp(Rank pRank, Suit pSuit, Transform parent = null)
+        public async void SetUp(StudentData studentData, Transform parent = null)
         {
             mmfPlayers = GetComponentsInChildren<MMF_Player>().ToDictionary(x => x.name, x => x);
             images = GetComponentsInChildren<Image>().ToDictionary(x => x.name, x => x);
-            rank = pRank;
-            suit = pSuit;
             if (parent != null)
             {
                 transform.SetParent(parent);
                 transform.localPosition = Vector3.zero;
             }
-            var package = YooAssets.GetPackage("DefaultPackage");
-            var handle = package.LoadSubAssetsAsync<Sprite>("Assets/GameRes/Art/8BitDeck_opt2");
-            await handle.Task;
-            var sp = handle.GetSubAssetObject<Sprite>("8BitDeck_opt2_" + (13 * (int)suit + (int)pRank));
-            images["rank"].sprite = sp;
+            images["headIcon"].sprite = studentData.headIcon;
             view.SetParent(Balatro.Instance.cardViewsParent);
         }
 

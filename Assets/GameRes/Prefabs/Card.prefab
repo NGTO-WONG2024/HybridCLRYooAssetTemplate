@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1499100950135641483}
   - component: {fileID: 4729124137995032900}
   m_Layer: 5
-  m_Name: rank
+  m_Name: headIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 142, y: 190}
+  m_SizeDelta: {x: 133, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1499100950135641483
 CanvasRenderer:
@@ -1307,7 +1307,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 162.615, y: 201.7768}
+  m_SizeDelta: {x: 133, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4867625167315479923
 CanvasRenderer:

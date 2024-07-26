@@ -123,3 +123,16 @@ MonoBehaviour:
         FilterRuleName: CollectShader
         AssetTags: 
         UserData: 
+    - GroupName: SO
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/SO
+        CollectorGUID: fe6112b16e33e43648c433cf31a4b3e9
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
