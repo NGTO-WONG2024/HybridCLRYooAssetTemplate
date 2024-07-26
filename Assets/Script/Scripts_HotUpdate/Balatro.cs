@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script.Scripts_HotUpdate
 {
@@ -27,41 +26,38 @@ namespace Script.Scripts_HotUpdate
 
         [Header("UnityBehaviour")] 
         public StudentCard studentCardPrefab;
-
-        
         public Transform cardViewsParent => rectTransforms["cardViewsParent"];
         public Transform deckArea => rectTransforms["deckArea"];
         public Transform tableArea => rectTransforms["tableArea"];
-
         public Transform outArea => rectTransforms["outArea"];
         public Transform handArea => rectTransforms["handArea"];
         public Transform senseiArea => rectTransforms["senseiArea"];
-        
-        
-        StudentCard[] studentCards => handArea.GetComponentsInChildren<StudentCard>();
-        SenseiCard[] senseiCards => senseiArea.GetComponentsInChildren<SenseiCard>();
+        public StudentCard[] studentCards => handArea.GetComponentsInChildren<StudentCard>();
+        public SenseiCard[] senseiCards => senseiArea.GetComponentsInChildren<SenseiCard>();
 
         #endregion
 
         #region Methods
 
         private Dictionary<string, RectTransform> rectTransforms;
+
         private async void Start()
-        {            
+        {
             Random.InitState(randomSeed);
             rectTransforms = GetComponentsInChildren<RectTransform>().ToDictionary(x => x.name, x => x);
             await CreatDeck();
         }
-        
-        
+
+
         /// <summary>
         /// 创建卡组
         /// </summary>
         /// <returns></returns>
         public async Task CreatDeck()
         {
-            string jsonString =(await ResManager.Instance.Load<TextAsset>("Assets/GameRes/SO/Student.json")).text;
-            Dictionary<string, StudentData> characters = JsonConvert.DeserializeObject<Dictionary<string, StudentData>>(jsonString);
+            string jsonString = (await ResManager.Instance.Load<TextAsset>("Assets/GameRes/SO/Student.json")).text;
+            Dictionary<string, StudentData> characters =
+                JsonConvert.DeserializeObject<Dictionary<string, StudentData>>(jsonString);
             var t = characters;
             List<StudentCard> deck = new List<StudentCard>();
             foreach (var kv in t)
@@ -72,7 +68,7 @@ namespace Script.Scripts_HotUpdate
                 deck.Add(temp);
             }
         }
-        
+
         /// <summary>
         /// 补满桌面
         /// </summary>
@@ -92,21 +88,23 @@ namespace Script.Scripts_HotUpdate
             {
                 if (tableArea.childCount == tableCardLimit) break;
                 if (deckArea.childCount == 0) break;
-                var random = Random.Range(0, deckArea.childCount );
+                var random = Random.Range(0, deckArea.childCount);
                 var card = deckArea.GetChild(random).transform;
                 card.SetParent(tableArea);
-                card.localPosition= Vector3.zero;
+                card.localPosition = Vector3.zero;
                 await Task.Delay((int)(200 / Time.timeScale));
             }
         }
 
 
-
+        /// <summary>
+        /// 出牌
+        /// </summary>
         public async void PlayCard()
         {
-            tableArea.Translate(new Vector3(0,1000,0));
+            tableArea.Translate(new Vector3(0, 1000, 0));
             await Task.Delay((int)(1000 / Time.timeScale));
-            handArea.Translate(new Vector3(0,500,0));
+            handArea.Translate(new Vector3(0, 500, 0));
             await Task.Delay((int)(1000 / Time.timeScale));
             foreach (var card in studentCards)
             {
@@ -115,13 +113,14 @@ namespace Script.Scripts_HotUpdate
                     var t = senseiCard.Buff_BeforeAttack(card.studentData);
                     Debug.Log("buffed" + t.attack);
                 }
+
                 await card.PlayFeelAsync("count");
             }
-            await Task.Delay((int)(1000 / Time.timeScale));
-            handArea.Translate(new Vector3(0,-500,0));
-            await Task.Delay((int)(1000 / Time.timeScale));
-            tableArea.Translate(new Vector3(0,-1000,0));
 
+            await Task.Delay((int)(1000 / Time.timeScale));
+            handArea.Translate(new Vector3(0, -500, 0));
+            await Task.Delay((int)(1000 / Time.timeScale));
+            tableArea.Translate(new Vector3(0, -1000, 0));
         }
 
         public void TimeScale(float v)
