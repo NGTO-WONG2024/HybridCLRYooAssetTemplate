@@ -7,7 +7,7 @@ namespace AllIn1SpringsToolkit.Demo.Scripts
     {
         [SerializeField] private GameObject firstSelectedUiElement;
         [SerializeField] private CanvasGroup buttonsCanvasGroup;
-        protected bool isOpen;
+        protected bool isOpen = true;
 
         public virtual void Initialize(bool hideUi)
         {

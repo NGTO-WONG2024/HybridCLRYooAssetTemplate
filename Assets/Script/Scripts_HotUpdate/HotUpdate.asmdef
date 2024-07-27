@@ -4,7 +4,8 @@
     "references": [
         "MoreMountains.Tools",
         "YooAsset",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "AllIn1SpringsToolkitAssembly"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AllIn1SpringsToolkit.Demo.Scripts;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace Script.Scripts_HotUpdate
         public int randomSeed = 1;
         public int handCardLimit = 5;
         public int tableCardLimit = 5;
+        public int shopSenseiLimit = 5;
         public int round = 0;
         public int targetScore = 0;
         public int currentScore = 0;
@@ -26,14 +28,22 @@ namespace Script.Scripts_HotUpdate
 
         [Header("UnityBehaviour")] 
         public StudentCard studentCardPrefab;
+        public SenseiCard senseiCardPrefab;
+
+        public ScoreCounter scoreCounter;
+        
         public Transform cardViewsParent => rectTransforms["cardViewsParent"];
         public Transform deckArea => rectTransforms["deckArea"];
         public Transform tableArea => rectTransforms["tableArea"];
         public Transform outArea => rectTransforms["outArea"];
         public Transform handArea => rectTransforms["handArea"];
         public Transform senseiArea => rectTransforms["senseiArea"];
+        public Transform shopSenseiArea => rectTransforms["shopSenseiArea"];
+        public Transform shopPanel => rectTransforms["shopPanel"];
+        
         public StudentCard[] studentCards => handArea.GetComponentsInChildren<StudentCard>();
         public SenseiCard[] senseiCards => senseiArea.GetComponentsInChildren<SenseiCard>();
+        public int Coin { get; set; } = 100;
 
         #endregion
 
@@ -45,27 +55,25 @@ namespace Script.Scripts_HotUpdate
         {
             Random.InitState(randomSeed);
             rectTransforms = GetComponentsInChildren<RectTransform>().ToDictionary(x => x.name, x => x);
-            await CreatDeck();
+            await CreatStudentDeck();
+            await Task.Delay((int)(1000/Time.timeScale));
+            RollCards();
         }
-
 
         /// <summary>
         /// 创建卡组
         /// </summary>
         /// <returns></returns>
-        public async Task CreatDeck()
+        public async Task CreatStudentDeck()
         {
             string jsonString = (await ResManager.Instance.Load<TextAsset>("Assets/GameRes/SO/Student.json")).text;
-            Dictionary<string, StudentData> characters =
+            Dictionary<string, StudentData> studentDatas =
                 JsonConvert.DeserializeObject<Dictionary<string, StudentData>>(jsonString);
-            var t = characters;
-            List<StudentCard> deck = new List<StudentCard>();
-            foreach (var kv in t)
+            foreach (var kv in studentDatas)
             {
                 var studentData = kv.Value;
                 var temp = Instantiate(studentCardPrefab, deckArea);
                 temp.SetUp(studentData, deckArea);
-                deck.Add(temp);
             }
         }
 
@@ -81,6 +89,7 @@ namespace Script.Scripts_HotUpdate
                 var card = tableArea.GetChild(tableArea.childCount - 1).transform;
                 card.SetParent(outArea);
                 card.localPosition = Vector3.zero;
+                card.GetComponent<CardBase>().PlaySound("cardFanSound");
                 await Task.Delay((int)(200 / Time.timeScale));
             }
 
@@ -92,6 +101,52 @@ namespace Script.Scripts_HotUpdate
                 var card = deckArea.GetChild(random).transform;
                 card.SetParent(tableArea);
                 card.localPosition = Vector3.zero;
+                card.GetComponent<CardBase>().PlaySound("cardFanSound");
+                await Task.Delay((int)(200 / Time.timeScale));
+            }
+        }
+
+
+        public async void ShowShop()
+        {
+            handArea.Translate(new Vector3(0,Screen.height,0));
+            tableArea.Translate(new Vector3(0,Screen.height,0));
+            await Task.Delay((int)(400 / Time.timeScale));
+            shopPanel.localPosition = new Vector3(0, 0, 0);
+            await Task.Delay((int)(400 / Time.timeScale));
+            shopPanel.localScale = Vector3.one;
+            await Task.Delay((int)(400 / Time.timeScale));
+            RollSenseiCards();
+        }
+        
+        public async void HideShop()
+        {
+            handArea.Translate(new Vector3(0,-Screen.height,0));
+            tableArea.Translate(new Vector3(0,-Screen.height,0));
+            shopPanel.localScale = Vector3.one/2f;
+            await Task.Delay((int)(400 / Time.timeScale));
+            shopPanel.localPosition = new Vector3(Screen.width, 0, 0);
+            await Task.Delay((int)(400 / Time.timeScale));
+        }
+
+        public async void RollSenseiCards()
+        {
+            List<ISensei> senseis = new()
+            {
+                new Sensei1(),
+                new Sensei2(),
+            };
+            
+            
+            while (true)
+            {
+                if (shopSenseiArea.childCount == shopSenseiLimit) break;
+                var random = Random.Range(0, senseis.Count);
+                var senseiCard = Instantiate(senseiCardPrefab, shopSenseiArea);
+                senseiCard.SetUp(senseis[random], shopSenseiArea);
+                senseiCard.transform.SetParent(shopSenseiArea);
+                senseiCard.transform.localPosition = Vector3.zero;
+                senseiCard.PlaySound("cardFanSound");
                 await Task.Delay((int)(200 / Time.timeScale));
             }
         }
@@ -108,15 +163,16 @@ namespace Script.Scripts_HotUpdate
             await Task.Delay((int)(1000 / Time.timeScale));
             foreach (var card in studentCards)
             {
+                var data = card.studentData;
                 foreach (var senseiCard in senseiCards)
                 {
-                    var t = senseiCard.Buff_BeforeAttack(card.studentData);
-                    Debug.Log("buffed" + t.attack);
+                    data = await senseiCard.Buff_BeforeAttack(data);
+                    scoreCounter.ChangeScore(data.attack,card.transform.position+new Vector3(0,150,0));
                 }
-
+                card.PlaySound("multhit1Sound");
+                scoreCounter.ChangeScore(data.attack,card.transform.position+new Vector3(0,150,0));
                 await card.PlayFeelAsync("count");
             }
-
             await Task.Delay((int)(1000 / Time.timeScale));
             handArea.Translate(new Vector3(0, -500, 0));
             await Task.Delay((int)(1000 / Time.timeScale));

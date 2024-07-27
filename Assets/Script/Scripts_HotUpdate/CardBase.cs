@@ -19,6 +19,7 @@ namespace Script.Scripts_HotUpdate
         //protected Dictionary<string, Button> buttons;
         protected Dictionary<string, TextMeshProUGUI> texts;
         private MMFollowTarget followTarget;
+        [MMReadOnly]
         public Transform view;
 
         protected void Awake()
@@ -47,5 +48,6 @@ namespace Script.Scripts_HotUpdate
         {
             audioSources[sound].Play();
         }
+
     }
 }

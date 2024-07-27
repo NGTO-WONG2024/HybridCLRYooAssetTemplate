@@ -1,4 +1,3 @@
-using Sirenix.OdinInspector;
 using UnityEngine;
 using Newtonsoft.Json;
 
@@ -9,10 +8,12 @@ namespace Script
         public string id;
         public string ja;
         public string en;
-        public string headIconPath => "Assets/GameRes/Art/ba/head/266px-" + en;
-        public string schoolIconPath => "Assets/GameRes/Art/ba/icon/" + school.ToString();
         public School school;
         public int attack = 1;
+        
+        public string headIconPath => "Assets/GameRes/Art/ba/head/266px-" + en;
+        public string schoolIconPath => "Assets/GameRes/Art/ba/icon/" + school.ToString();
+
 
         public enum School
         {
