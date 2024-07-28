@@ -42,7 +42,7 @@ namespace Script.Scripts_HotUpdate
         public StudentData Buff_BeforeAttack(StudentData original)
         {
             var t = new StudentData();
-            t.attack = Balatro.Instance.senseiCards.Length;
+            t.attack = Balatro.Instance.SenseiCards.Length;
             return t;
         }
     }

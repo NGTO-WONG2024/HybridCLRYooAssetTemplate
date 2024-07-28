@@ -25,7 +25,7 @@ namespace Script.Scripts_HotUpdate
             return sensei.Buff_BeforeAttack(data);
         }
 
-        protected override void OnClick()
+        public override void OnClick()
         {
             base.OnClick();
             if (Balatro.Instance.Coin > sensei.Cost)

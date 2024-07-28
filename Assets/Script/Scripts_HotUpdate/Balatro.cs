@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AllIn1SpringsToolkit.Demo.Scripts;
+using GameRes.SO;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Script.Scripts_HotUpdate
 {
@@ -29,21 +31,29 @@ namespace Script.Scripts_HotUpdate
         [Header("UnityBehaviour")] 
         public StudentCard studentCardPrefab;
         public SenseiCard senseiCardPrefab;
+        public LevelCard levelCardPrefab;
 
         public ScoreCounter scoreCounter;
         
         public Transform cardViewsParent => rectTransforms["cardViewsParent"];
+        public Transform bgViewsParent => rectTransforms["bgViewsParent"];
         public Transform deckArea => rectTransforms["deckArea"];
         public Transform tableArea => rectTransforms["tableArea"];
         public Transform outArea => rectTransforms["outArea"];
         public Transform handArea => rectTransforms["handArea"];
         public Transform senseiArea => rectTransforms["senseiArea"];
+        public RectTransform Bottom => rectTransforms["Bottom"];
         public Transform shopSenseiArea => rectTransforms["shopSenseiArea"];
         public Transform shopPanel => rectTransforms["shopPanel"];
+        public Transform levelScroll => rectTransforms["levelScroll"];
         
-        public StudentCard[] studentCards => handArea.GetComponentsInChildren<StudentCard>();
-        public SenseiCard[] senseiCards => senseiArea.GetComponentsInChildren<SenseiCard>();
+        public StudentCard[] HandCards => handArea.GetComponentsInChildren<StudentCard>();
+        public StudentCard[] DeckCards => deckArea.GetComponentsInChildren<StudentCard>();
+        public StudentCard[] TableCads => tableArea.GetComponentsInChildren<StudentCard>();
+        public SenseiCard[] SenseiCards => senseiArea.GetComponentsInChildren<SenseiCard>();
         public int Coin { get; set; } = 100;
+
+        public bool inGame;
 
         #endregion
 
@@ -54,11 +64,32 @@ namespace Script.Scripts_HotUpdate
         private async void Start()
         {
             Random.InitState(randomSeed);
+            
             rectTransforms = GetComponentsInChildren<RectTransform>().ToDictionary(x => x.name, x => x);
+            
+            var levelConfigs= await ResManager.Instance.LoadAll<LevelConfig>("Assets/GameRes/SO/Level1.asset");
+            foreach (var levelConfig in levelConfigs)
+            {
+                var tempLevel = Instantiate(levelCardPrefab, levelScroll.GetComponent<ScrollRect>().content.transform);
+                tempLevel.SetUp(levelConfig);
+            }
+        }
+
+        public async void StartGame()
+        {
+            inGame = true;
+            SetBottomActive(true);
             await CreatStudentDeck();
             await Task.Delay((int)(1000/Time.timeScale));
             RollCards();
         }
+
+
+        public void SetBottomActive(bool isOn)
+        {
+            Bottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, isOn ? 150 : -350);
+        } 
+        
 
         /// <summary>
         /// 创建卡组
@@ -161,10 +192,10 @@ namespace Script.Scripts_HotUpdate
             await Task.Delay((int)(1000 / Time.timeScale));
             handArea.Translate(new Vector3(0, 500, 0));
             await Task.Delay((int)(1000 / Time.timeScale));
-            foreach (var card in studentCards)
+            foreach (var card in HandCards)
             {
                 var data = card.studentData;
-                foreach (var senseiCard in senseiCards)
+                foreach (var senseiCard in SenseiCards)
                 {
                     data = await senseiCard.Buff_BeforeAttack(data);
                     scoreCounter.ChangeScore(data.attack,card.transform.position+new Vector3(0,150,0));

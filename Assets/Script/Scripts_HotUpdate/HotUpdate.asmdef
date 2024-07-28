@@ -5,7 +5,9 @@
         "MoreMountains.Tools",
         "YooAsset",
         "Unity.TextMeshPro",
-        "AllIn1SpringsToolkitAssembly"
+        "AllIn1SpringsToolkitAssembly",
+        "DOTween.Modules",
+        "DOTweenPro.Scripts"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

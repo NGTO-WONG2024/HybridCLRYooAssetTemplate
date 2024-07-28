@@ -16,7 +16,6 @@ namespace Script.Scripts_HotUpdate
         protected Dictionary<string, MMF_Player> mmfPlayers;
         protected Dictionary<string, Image> images;
         protected Dictionary<string, AudioSource> audioSources;
-        //protected Dictionary<string, Button> buttons;
         protected Dictionary<string, TextMeshProUGUI> texts;
         private MMFollowTarget followTarget;
         [MMReadOnly]
@@ -30,11 +29,10 @@ namespace Script.Scripts_HotUpdate
             audioSources = GetComponentsInChildren<AudioSource>().ToDictionary(x => x.name, x => x);
             view = transform.GetChild(0);
             view.SetParent(Balatro.Instance.cardViewsParent);
-            GetComponent<Button>().onClick.AddListener(OnClick);
             
         }
 
-        protected virtual void OnClick()
+        public virtual async void OnClick()
         {
             PlaySound("clickSound");
         }
@@ -49,5 +47,10 @@ namespace Script.Scripts_HotUpdate
             audioSources[sound].Play();
         }
 
+        public void DestroyCard()
+        {
+             Destroy(view.gameObject);
+             Destroy(gameObject);
+        }
     }
 }

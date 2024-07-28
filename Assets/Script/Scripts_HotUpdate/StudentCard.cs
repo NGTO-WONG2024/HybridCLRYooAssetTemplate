@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +22,7 @@ namespace Script.Scripts_HotUpdate
             texts["name"].text = data.en;
         }
 
-        protected override void OnClick()
+        public override async void OnClick()
         {
             base.OnClick();
             if (transform.parent == Balatro.Instance.handArea)
@@ -38,8 +39,17 @@ namespace Script.Scripts_HotUpdate
                 if (Balatro.Instance.handArea.childCount >= Balatro.Instance.handCardLimit) return;
                 transform.SetParent(Balatro.Instance.handArea);
                 transform.localPosition = Vector3.zero;
-                Debug.Log("B");
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.root.GetComponent<RectTransform>());
+                await Task.Delay((int)(1000 / Time.timeScale));
+                var handCards = Balatro.Instance.HandCards;
+                foreach (var card in handCards)
+                {
+                    if (card.studentData.school == this.studentData.school)
+                    {
+                        _ = card.PlayFeelAsync("schoolFeel");
+                    }
+                }
+                _ =  PlayFeelAsync("schoolFeel");
                 return;
             }
         }
