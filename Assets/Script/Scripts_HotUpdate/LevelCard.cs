@@ -14,10 +14,12 @@ namespace Script.Scripts_HotUpdate
         private bool isOn = false;
         public async void SetUp(LevelConfig config)
         {
+            gameObject.name = "LevelCard_" + config.index;
+            view.name = "LevelCardView_" + config.index;
             levelConfig = config;
             images["bg"].sprite = await ResManager.Instance.Load<Sprite>(config.bgPath);
             texts["name"].text = config.levelName;
-            view.SetParent(Balatro.Instance.bgViewsParent);
+            view.SetParent(Game.Instance.bgViewsParent);
         }
         
         public override async void OnClick()
@@ -42,10 +44,10 @@ namespace Script.Scripts_HotUpdate
                 }
                 else
                 {
-                    if (Balatro.Instance.inGame)
+                    if (Game.Instance.inGame)
                     {                    return;
                     }
-                    Balatro.Instance.StartGame();
+                    Game.Instance.StartGame();
 
                     // maskRectTransform.DOSizeDelta(new Vector2(500,800),0.3f).SetEase(Ease.InOutBack);
                     // images["bg"].GetComponent<RectTransform>().DOSizeDelta(new Vector2(2512f / 2f, 1766f / 2f), 0.3f)

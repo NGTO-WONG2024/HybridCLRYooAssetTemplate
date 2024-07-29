@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Script.Scripts_HotUpdate
 {
-    public class Balatro : SingletonMonoBehaviour<Balatro>
+    public class Game : SingletonMonoBehaviour<Game>
     {
         #region Variables
 

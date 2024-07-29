@@ -28,7 +28,7 @@ namespace Script.Scripts_HotUpdate
             texts = GetComponentsInChildren<TextMeshProUGUI>().ToDictionary(x => x.name, x => x);
             audioSources = GetComponentsInChildren<AudioSource>().ToDictionary(x => x.name, x => x);
             view = transform.GetChild(0);
-            view.SetParent(Balatro.Instance.cardViewsParent);
+            view.SetParent(Game.Instance.cardViewsParent);
             
         }
 

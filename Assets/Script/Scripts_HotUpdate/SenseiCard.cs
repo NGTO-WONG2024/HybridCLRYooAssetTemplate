@@ -28,11 +28,11 @@ namespace Script.Scripts_HotUpdate
         public override void OnClick()
         {
             base.OnClick();
-            if (Balatro.Instance.Coin > sensei.Cost)
+            if (Game.Instance.Coin > sensei.Cost)
             {
-                transform.SetParent(Balatro.Instance.senseiArea);
+                transform.SetParent(Game.Instance.senseiArea);
                 transform.localPosition = Vector3.zero;
-                Balatro.Instance.Coin -= sensei.Cost;
+                Game.Instance.Coin -= sensei.Cost;
             }
         }
     }

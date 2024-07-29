@@ -25,23 +25,23 @@ namespace Script.Scripts_HotUpdate
         public override async void OnClick()
         {
             base.OnClick();
-            if (transform.parent == Balatro.Instance.handArea)
+            if (transform.parent == Game.Instance.handArea)
             {
-                transform.SetParent(Balatro.Instance.tableArea);
+                transform.SetParent(Game.Instance.tableArea);
                 transform.localPosition = Vector3.zero;
                 Debug.Log("A");
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.root.GetComponent<RectTransform>());
                 return;
             }
 
-            if (transform.parent == Balatro.Instance.tableArea)
+            if (transform.parent == Game.Instance.tableArea)
             {
-                if (Balatro.Instance.handArea.childCount >= Balatro.Instance.handCardLimit) return;
-                transform.SetParent(Balatro.Instance.handArea);
+                if (Game.Instance.handArea.childCount >= Game.Instance.handCardLimit) return;
+                transform.SetParent(Game.Instance.handArea);
                 transform.localPosition = Vector3.zero;
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.root.GetComponent<RectTransform>());
                 await Task.Delay((int)(1000 / Time.timeScale));
-                var handCards = Balatro.Instance.HandCards;
+                var handCards = Game.Instance.HandCards;
                 foreach (var card in handCards)
                 {
                     if (card.studentData.school == this.studentData.school)
