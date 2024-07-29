@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MoreMountains.Tools;
 using Script.Scripts_HotUpdate;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 [CustomEditor(typeof(Tutorial))]
@@ -15,7 +17,7 @@ public class TutorialEditor : Editor
 
         if (GUILayout.Button("a"))
         {
-            script.TutorialPlay(script.targetAreaName, "a");
+            script.TutorialPlay(script.tutorialIndex);
         }
     }
 }
@@ -27,12 +29,14 @@ public class Tutorial : MonoBehaviour
     public RectTransform unmask;
     [MMReadOnly]
     public RectTransform targetArea;
-
     public string targetAreaName;
     public List<Sprite> frames;  
     public Image alice;
-    public float frameRate = 1.0f;  
+    public float frameRate = 1.0f;
 
+    public List<string> clicks = new();
+    [FormerlySerializedAs("currentIndex")] public int tutorialIndex = 0;
+    
     private int currentFrame;
     private MMFollowTarget unmaskFollow;
     private float timer;
@@ -42,12 +46,49 @@ public class Tutorial : MonoBehaviour
         unmaskFollow = unmask.GetComponent<MMFollowTarget>();
         currentFrame = 0;  // 初始化当前帧索引
         timer = 0.0f;  // 初始化计时器
+        TutorialPlay(0);
     }
 
     void Update()
     {
         AliceGif();
         CopySizeAndPosition();
+        CheckClick();
+    }
+
+    void CheckClick()
+    {
+        bool clickInside = false;
+        if (Input.GetMouseButtonDown(0))
+        {
+            clickInside = IsMouseOverImage(Input.mousePosition);
+        }
+
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                clickInside=IsMouseOverImage(touch.position);
+            }
+        }
+
+        if (clickInside)
+        {
+            tutorialIndex+=1;
+            TutorialPlay(tutorialIndex);
+        }
+        
+    }
+    
+    public bool IsMouseOverImage(Vector2 clickPos)
+    {
+        if (targetArea == null)
+        {
+            return false;
+        }
+        Vector2 localMousePosition = targetArea.InverseTransformPoint(clickPos);
+        return targetArea.rect.Contains(localMousePosition);
     }
 
 
@@ -67,11 +108,10 @@ public class Tutorial : MonoBehaviour
     }
     
     // 调用这个函数来拷贝并对齐两个Image的大小和位置
-    public void CopySizeAndPosition()
+    private void CopySizeAndPosition()
     {
         if (unmask == null || targetArea == null)
         {
-            Debug.LogError("Source or target image is null!");
             return;
         }
 
@@ -81,9 +121,26 @@ public class Tutorial : MonoBehaviour
         unmaskFollow.Target = targetArea;
     }
 
-    public void TutorialPlay(string gameObjectName, string desc)
+    public async void TutorialPlay(int index)
     {
-        targetArea = Game.Instance.transform.Find(gameObjectName).GetComponent<RectTransform>();
+        if (index >= clicks.Count)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+        Transform t = null;
+        for (int i = 0; i < 20; i++)
+        {
+            Debug.Log("finding");
+            t = Game.Instance.transform.Find(clicks[index]);
+            if (t != null)
+            {
+                break;
+            }
+            await Task.Delay(500);
+        }
+        targetArea = t.GetComponent<RectTransform>();
+
     }
 
 

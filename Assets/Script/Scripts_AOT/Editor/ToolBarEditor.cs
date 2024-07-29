@@ -157,7 +157,22 @@ public class SelectionLogger
     {
         if (Selection.activeObject != null)
         {
-            Debug.Log("Selected: " + Selection.activeObject.name);
+            //Debug.Log("Selected: " + Selection.activeObject.name);
+
+            var tr= Selection.activeTransform;
+            if (tr== null)
+            {
+                return;
+            }
+            string path = tr.name;
+            Transform parent = tr.parent;
+
+            while (parent != null)
+            {
+                path = parent.name + "/" + path;
+                parent = parent.parent;
+            }
+            UnityEngine.Debug.Log(path);
         }
     }
 }

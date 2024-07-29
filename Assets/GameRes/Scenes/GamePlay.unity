@@ -499,6 +499,7 @@ RectTransform:
   - {fileID: 770311150}
   - {fileID: 1263163312}
   - {fileID: 382997811}
+  - {fileID: 1295844980}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -527,6 +528,7 @@ MonoBehaviour:
   currentScore: 0
   playCardCount: 0
   rollCardCount: 0
+  tutorial: {fileID: 1295844985}
   studentCardPrefab: {fileID: 9079810495875232140, guid: a154a4883909f42ef8ac0e6c6246e50c, type: 3}
   senseiCardPrefab: {fileID: 1468282661659645938, guid: 3ff08dcd1ebda4ec7bc4a16a0d4332e4, type: 3}
   levelCardPrefab: {fileID: 8726157977785107842, guid: 31aa1e7d044a8432d81cc06bdd076457, type: 3}
@@ -2908,108 +2910,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1116162237}
   m_CullTransparentMesh: 1
---- !u!1 &1156875927
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1156875931}
-  - component: {fileID: 1156875930}
-  - component: {fileID: 1156875929}
-  - component: {fileID: 1156875928}
-  m_Layer: 5
-  m_Name: Canvas
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1156875928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156875927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &1156875929
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156875927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 2340, y: 1080}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
---- !u!223 &1156875930
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156875927}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!224 &1156875931
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156875927}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1295844980}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
 --- !u!1 &1263163311
 GameObject:
   m_ObjectHideFlags: 0
@@ -3228,7 +3128,7 @@ RectTransform:
   - {fileID: 1284586183}
   - {fileID: 382658500}
   - {fileID: 940632361}
-  m_Father: {fileID: 1156875931}
+  m_Father: {fileID: 206035868}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3313,6 +3213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unmask: {fileID: 1284586183}
   targetArea: {fileID: 0}
+  targetAreaName: view/bgViewsParent/LevelCardView_0
   frames:
   - {fileID: 21300000, guid: 0e81dd59d3bf24e419044b8fa2b1261d, type: 3}
   - {fileID: 21300000, guid: 0e81dd59d3bf24e419044b8fa2b1261d, type: 3}
@@ -3328,6 +3229,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1ea79ba1ae9f14cd5aa8460171742e35, type: 3}
   alice: {fileID: 940632365}
   frameRate: 24
+  clicks:
+  - view/bgViewsParent/0
+  - view/bgViewsParent/0
+  - view/bgViewsParent/0
+  - view/CenterView/tableArea/Serina
+  - view/CenterView/tableArea/Shigure
+  - view/BottomView/PlayCardButton
+  tutorialIndex: 0
 --- !u!1 &1303287261
 GameObject:
   m_ObjectHideFlags: 0
@@ -5174,4 +5083,3 @@ SceneRoots:
   - {fileID: 1657452378}
   - {fileID: 206035868}
   - {fileID: 1063761453}
-  - {fileID: 1156875931}

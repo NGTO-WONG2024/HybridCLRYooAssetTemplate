@@ -10,6 +10,8 @@ namespace Script.Scripts_HotUpdate
         
         public async void SetUp(StudentData data, Transform parent = null)
         {
+            gameObject.name = data.en;
+            view.name = data.en;
             studentData = data;
             if (parent != null)
             {

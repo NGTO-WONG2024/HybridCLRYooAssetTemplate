@@ -14,8 +14,8 @@ namespace Script.Scripts_HotUpdate
         private bool isOn = false;
         public async void SetUp(LevelConfig config)
         {
-            gameObject.name = "LevelCard_" + config.index;
-            view.name = "LevelCardView_" + config.index;
+            gameObject.name = config.index.ToString();
+            view.name = config.index.ToString();
             levelConfig = config;
             images["bg"].sprite = await ResManager.Instance.Load<Sprite>(config.bgPath);
             texts["name"].text = config.levelName;

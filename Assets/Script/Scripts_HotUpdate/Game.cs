@@ -28,7 +28,8 @@ namespace Script.Scripts_HotUpdate
 
         #region UnityBehaviour
 
-        [Header("UnityBehaviour")] 
+        [Header("UnityBehaviour")]
+        public Tutorial tutorial;
         public StudentCard studentCardPrefab;
         public SenseiCard senseiCardPrefab;
         public LevelCard levelCardPrefab;
@@ -73,6 +74,8 @@ namespace Script.Scripts_HotUpdate
                 var tempLevel = Instantiate(levelCardPrefab, levelScroll.GetComponent<ScrollRect>().content.transform);
                 tempLevel.SetUp(levelConfig);
             }
+
+            tutorial.TutorialPlay(0);
         }
 
         public async void StartGame()
