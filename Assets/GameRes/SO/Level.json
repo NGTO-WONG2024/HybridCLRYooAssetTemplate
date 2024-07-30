@@ -1,0 +1,37 @@
+{
+  "0": {
+    "index": 0,
+    "levelName": "0",
+    "targetPoint": 0,
+    "BgPath": "Assets/GameRes/Art/ba/LevelBG/0.png",
+    "LevelDesc": "level0"
+  },
+  "1": {
+    "index": 1,
+    "levelName": "1",
+    "targetPoint": 100,
+    "BgPath": "Assets/GameRes/Art/ba/LevelBG/1.png",
+    "LevelDesc": "level1"
+  },
+  "2": {
+    "index": 2,
+    "levelName": "2",
+    "targetPoint": 200,
+    "BgPath": "Assets/GameRes/Art/ba/LevelBG/2.png",
+    "LevelDesc": "level2"
+  },
+  "3": {
+    "index": 3,
+    "levelName": "3",
+    "targetPoint": 300,
+    "BgPath": "Assets/GameRes/Art/ba/LevelBG/3.png",
+    "LevelDesc": "level3"
+  },
+  "4": {
+    "index": 4,
+    "levelName": "4",
+    "targetPoint": 400,
+    "BgPath": "Assets/GameRes/Art/ba/LevelBG/4.png",
+    "LevelDesc": "level4"
+  }
+}

@@ -10,16 +10,16 @@ namespace Script.Scripts_HotUpdate
     public class LevelCard : CardBase
     {
         public RectTransform maskRectTransform;
-        private LevelConfig levelConfig;
+        private LevelData levelData;
         private bool isOn = false;
-        public async void SetUp(LevelConfig config)
+        public async void SetUp(LevelData data)
         {
-            gameObject.name = config.index.ToString();
-            view.name = config.index.ToString();
-            levelConfig = config;
-            images["bg"].sprite = await ResManager.Instance.Load<Sprite>(config.bgPath);
-            texts["name"].text = config.levelName;
-            view.SetParent(Game.Instance.bgViewsParent);
+            gameObject.name = data.index.ToString();
+            view.name = data.index.ToString();
+            levelData = data;
+            images["bg"].sprite = await ResManager.Instance.Load<Sprite>(data.BgPath);
+            texts["name"].text = data.levelName;
+            view.SetParent(Game.Instance.BgViewsParent);
         }
         
         public override async void OnClick()

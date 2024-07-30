@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Script.Scripts_HotUpdate;
 using UnityEditor;
 using UnityEngine;
 using YooAsset;
@@ -25,14 +24,5 @@ namespace Script
             }
         }
         
-        public async Task<List<T>> LoadAll<T>(string path) where T : UnityEngine.Object
-        {
-            var package = YooAssets.GetPackage("DefaultPackage");
-            var handle = package.LoadAllAssetsAsync<T>(path);
-            await handle.Task;
-            var t = handle.AllAssetObjects;
-            var result = t.Cast<T>().ToList();
-            return result;
-        }
     }
 }

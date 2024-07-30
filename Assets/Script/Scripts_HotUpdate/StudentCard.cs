@@ -27,19 +27,19 @@ namespace Script.Scripts_HotUpdate
         public override async void OnClick()
         {
             base.OnClick();
-            if (transform.parent == Game.Instance.handArea)
+            if (transform.parent == Game.Instance.HandArea)
             {
-                transform.SetParent(Game.Instance.tableArea);
+                transform.SetParent(Game.Instance.TableArea);
                 transform.localPosition = Vector3.zero;
                 Debug.Log("A");
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.root.GetComponent<RectTransform>());
                 return;
             }
 
-            if (transform.parent == Game.Instance.tableArea)
+            if (transform.parent == Game.Instance.TableArea)
             {
-                if (Game.Instance.handArea.childCount >= Game.Instance.handCardLimit) return;
-                transform.SetParent(Game.Instance.handArea);
+                if (Game.Instance.HandArea.childCount >= Game.Instance.handCardLimit) return;
+                transform.SetParent(Game.Instance.HandArea);
                 transform.localPosition = Vector3.zero;
                 LayoutRebuilder.ForceRebuildLayoutImmediate(transform.root.GetComponent<RectTransform>());
                 await Task.Delay((int)(1000 / Time.timeScale));

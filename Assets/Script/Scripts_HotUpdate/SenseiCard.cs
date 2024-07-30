@@ -30,7 +30,7 @@ namespace Script.Scripts_HotUpdate
             base.OnClick();
             if (Game.Instance.Coin > sensei.Cost)
             {
-                transform.SetParent(Game.Instance.senseiArea);
+                transform.SetParent(Game.Instance.SenseiArea);
                 transform.localPosition = Vector3.zero;
                 Game.Instance.Coin -= sensei.Cost;
             }

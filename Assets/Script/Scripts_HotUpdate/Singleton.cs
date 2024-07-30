@@ -1,25 +1,28 @@
-public class Singleton<T> where T : class, new()
+namespace Script.Scripts_HotUpdate
 {
-    private static readonly object _lock = new object();
-    private static T _instance;
-
-    protected Singleton() { }
-
-    public static T Instance
+    public class Singleton<T> where T : class, new()
     {
-        get
+        private static readonly object _lock = new object();
+        private static T _instance;
+
+        protected Singleton() { }
+
+        public static T Instance
         {
-            if (_instance == null)
+            get
             {
-                lock (_lock)
+                if (_instance == null)
                 {
-                    if (_instance == null)
+                    lock (_lock)
                     {
-                        _instance = new T();
+                        if (_instance == null)
+                        {
+                            _instance = new T();
+                        }
                     }
                 }
+                return _instance;
             }
-            return _instance;
         }
     }
 }

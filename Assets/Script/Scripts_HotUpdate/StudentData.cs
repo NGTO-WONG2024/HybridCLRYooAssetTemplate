@@ -1,7 +1,4 @@
-using UnityEngine;
-using Newtonsoft.Json;
-
-namespace Script
+namespace Script.Scripts_HotUpdate
 {
     public class StudentData
     {
@@ -13,7 +10,6 @@ namespace Script
         
         public string headIconPath => "Assets/GameRes/Art/ba/head/266px-" + en;
         public string schoolIconPath => "Assets/GameRes/Art/ba/icon/" + school.ToString();
-
 
         public enum School
         {

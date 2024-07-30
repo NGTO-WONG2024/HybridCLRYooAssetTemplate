@@ -1,7 +1,8 @@
+using AllIn1SpringsToolkit;
 using TMPro;
 using UnityEngine;
 
-namespace AllIn1SpringsToolkit.Demo.Scripts
+namespace Script.Scripts_HotUpdate
 {
     public class ScoreCounterFloaty : MonoBehaviour
     {
